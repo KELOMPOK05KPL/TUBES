@@ -1,27 +1,42 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Test_API_tubes.Models;
-using Test_API_tubes.Repositories;
 
-namespace Test_API_tubes.Controllers;
-
-[ApiController]
-[Route("api/auth")]
-public class AuthController : ControllerBase
+public static class DataStore
 {
-    [HttpPost("register")]
-    public IActionResult Register(User user)
+    private static readonly string filePath = "D:\\My Code\\GUI C#\\TUBES\\Tubes_KPL\\Tubes_API\\Repositories\\user.json";
+
+    public static List<User> LoadUsers()
     {
-        user.Id = DataStore.Users.Count + 1;
-        DataStore.Users.Add(user);
-        return Ok(user);
+        if (!File.Exists(filePath))
+        {
+            return new List<User>();
+        }
+
+        var json = File.ReadAllText(filePath);
+        return System.Text.Json.JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
     }
 
-    [HttpPost("login")]
-    public IActionResult Login([FromBody] User login)
+    public static void SaveUsers(List<User> users)
     {
-        var user = DataStore.Users.FirstOrDefault(u => u.Username == login.Username && u.Password == login.Password);
-        if (user == null) return Unauthorized();
-        return Ok(user);
+        var json = System.Text.Json.JsonSerializer.Serialize(users);
+        File.WriteAllText(filePath, json);
+    }
+
+    public static void AddUser(User user)
+    {
+        var users = LoadUsers();
+        users.Add(user);
+        SaveUsers(users);
+    }
+
+    public static void DeleteUser(int id)
+    {
+        var users = LoadUsers();
+        var userToDelete = users.FirstOrDefault(u => u.Id == id);
+        if (userToDelete != null)
+        {
+            users.Remove(userToDelete);
+            SaveUsers(users);
+        }
     }
 }
+
