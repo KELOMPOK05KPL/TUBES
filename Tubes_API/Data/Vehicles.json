@@ -1,0 +1,32 @@
+[
+  {
+    "Id": 1,
+    "Name": "Toyota Avanza",
+    "Type": "Mobil",
+    "IsAvailable": true
+  },
+  {
+    "Id": 2,
+    "Name": "Honda Beat",
+    "Type": "Motor",
+    "IsAvailable": true
+  },
+  {
+    "Id": 3,
+    "Name": "Daihatsu Xenia",
+    "Type": "Mobil",
+    "IsAvailable": false
+  },
+  {
+    "Id": 4,
+    "Name": "Yamaha NMAX",
+    "Type": "Motor",
+    "IsAvailable": true
+  },
+  {
+    "Id": 5,
+    "Name": "Toyota 86",
+    "Type": "Mobil",
+    "IsAvailable": true
+  }
+]
