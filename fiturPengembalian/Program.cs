@@ -1,91 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.Linq;
+using fiturPengembalian;
 
-public class Program
-{
-    public class PenaltyConfig
+class Program
+{    
+    static void Main()
     {
-        public int MaxReturnDays { get; set; }
-        public Dictionary<string, int> PenaltyPerDay { get; set; }
-    }
+        string penaltyPath = "penalty_config.json";
+        string vehiclePath = "Vehicle_Data.json";
 
-    public class Vehicle<T>
-    {
-        public T Type { get; set; }
-        public DateTime RentDate { get; set; }
+        var config = ReturnProcessor.LoadPenaltyConfig(penaltyPath);
+        var vehicleList = ReturnProcessor.LoadVehicles(vehiclePath);
 
-        public Vehicle(T type, DateTime rentDate)
+        Console.WriteLine("=== Daftar Kendaraan Tersedia ===");
+        var available = vehicleList.Where(v => v.IsAvailable).ToList();
+        for (int i = 0; i < available.Count; i++)
         {
-            Type = type;
-            RentDate = rentDate;
+            Console.WriteLine($"{i + 1}. {available[i].Name} ({available[i].Type})");
         }
-    }
 
-    public static void Main()
-    {
-        string configPath = "penalty_config.json";
-
-        if (!File.Exists(configPath))
+        Console.Write("Pilih nomor kendaraan yang ingin dikembalikan: ");
+        if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > available.Count)
         {
-            Console.WriteLine("File konfigurasi tidak ditemukan!");
+            Console.WriteLine("Pilihan tidak valid.");
             return;
         }
 
-        PenaltyConfig config = LoadConfig(configPath);
+        var selected = available[choice - 1];
 
-        Console.Write("Masukkan jenis kendaraan (Motor/Mobil): ");
-        string jenis = Console.ReadLine().Trim();
-
-        if (!config.PenaltyPerDay.ContainsKey(jenis))
-        {
-            Console.WriteLine("Jenis kendaraan tidak dikenali. Hanya tersedia: Motor, Mobil");
-            return;
-        }
-
-        Console.Write("Masukkan tanggal sewa (format: yyyy-MM-dd): ");
+        Console.Write("Masukkan tanggal sewa (yyyy-MM-dd): ");
         if (!DateTime.TryParse(Console.ReadLine(), out DateTime rentDate))
         {
             Console.WriteLine("Format tanggal tidak valid.");
             return;
         }
 
-        Console.Write("Masukkan tanggal pengembalian (format: yyyy-MM-dd): ");
+        Console.Write("Masukkan tanggal pengembalian (yyyy-MM-dd): ");
         if (!DateTime.TryParse(Console.ReadLine(), out DateTime returnDate))
         {
             Console.WriteLine("Format tanggal tidak valid.");
             return;
         }
 
-        var vehicle = new Vehicle<string>(jenis, rentDate);
-        ProcessReturn(vehicle, config, returnDate);
-    }
-
-    public static void ProcessReturn<T>(Vehicle<T> vehicle, PenaltyConfig config, DateTime returnDate)
-    {
-        string typeKey = vehicle.Type.ToString();
-        int maxDays = config.MaxReturnDays;
-        int flatPenalty = config.PenaltyPerDay[typeKey];
-
-        TimeSpan duration = returnDate - vehicle.RentDate;
-        int totalDays = (int)Math.Ceiling(duration.TotalDays);
-        bool isLate = totalDays > maxDays;
-        int totalPenalty = isLate ? flatPenalty : 0;
-        int overdueDays = isLate ? (totalDays - maxDays) : 0;
-
-        Console.WriteLine("\n--- Ringkasan Pengembalian ---");
-        Console.WriteLine($"Jenis Kendaraan  : {typeKey}");
-        Console.WriteLine($"Tanggal Sewa     : {vehicle.RentDate:dd/MM/yyyy}");
-        Console.WriteLine($"Tanggal Kembali  : {returnDate:dd/MM/yyyy}");
-        Console.WriteLine($"Durasi Sewa      : {totalDays} hari");
-        Console.WriteLine($"Terlambat        : {overdueDays} hari");
-        Console.WriteLine($"Total Denda      : Rp{totalPenalty:N0}");
-    }
-
-    public static PenaltyConfig LoadConfig(string filePath)
-    {
-        string json = File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<PenaltyConfig>(json);
+        var vehicle = new Vehicle<string>(selected.Type, rentDate, selected.Name);
+        ReturnProcessor.ProcessReturn(vehicle, config, returnDate);
     }
 }
