@@ -1,0 +1,9 @@
+{
+  "HargaSewa": {
+    "mobil": 150000,
+    "motor": 50000
+  },
+  "MaxDuration": 14,
+  "DefaultRentalDuration": 1,
+  "Currency": "Rp"
+}

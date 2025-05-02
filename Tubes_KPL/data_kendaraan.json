@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "Brand": "Honda",
+    "Model": "Beat",
+    "Type": "motor",
+    "IsAvailable": true
+  },
+  {
+    "Id": 2,
+    "Brand": "Yamaha",
+    "Model": "NMAX",
+    "Type": "motor",
+    "IsAvailable": false
+  },
+  {
+    "Id": 3,
+    "Brand": "Toyota",
+    "Model": "Avanza",
+    "Type": "mobil",
+    "IsAvailable": true
+  },
+  {
+    "Id": 4,
+    "Brand": "Suzuki",
+    "Model": "Ertiga",
+    "Type": "mobil",
+    "IsAvailable": false
+  },
+  {
+    "Id": 5,
+    "Brand": "Daihatsu",
+    "Model": "Xenia",
+    "Type": "mobil",
+    "IsAvailable": true
+  },
+  {
+    "Id": 6,
+    "Brand": "Kawasaki",
+    "Model": "Ninja",
+    "Type": "motor",
+    "IsAvailable": true
+  }
+]
