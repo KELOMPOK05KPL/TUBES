@@ -1,0 +1,7 @@
+{
+  "MaxReturnDays": 14,
+  "PenaltyPerDay": {
+    "Motor": 20000,
+    "Mobil": 50000
+  }
+}
