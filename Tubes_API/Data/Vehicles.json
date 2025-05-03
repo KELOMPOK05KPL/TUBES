@@ -4,13 +4,13 @@
     "Type": "Mobil",
     "Brand": "Toyota",
     "Model": "Avanza",
-    "State": 1
+    "State": 0
   },
   {
     "Id": 2,
     "Type": "Motor",
     "Brand": "Honda",
     "Model": "250RR",
-    "State": 0
+    "State": 1
   }
 ]
