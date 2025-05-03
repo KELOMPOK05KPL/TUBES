@@ -1,32 +1,16 @@
 [
   {
     "Id": 1,
-    "Name": "Toyota Avanza",
     "Type": "Mobil",
-    "IsAvailable": true
+    "Brand": "Toyota",
+    "Model": "Avanza",
+    "State": 1
   },
   {
     "Id": 2,
-    "Name": "Honda Beat",
     "Type": "Motor",
-    "IsAvailable": true
-  },
-  {
-    "Id": 3,
-    "Name": "Daihatsu Xenia",
-    "Type": "Mobil",
-    "IsAvailable": false
-  },
-  {
-    "Id": 4,
-    "Name": "Yamaha NMAX",
-    "Type": "Motor",
-    "IsAvailable": true
-  },
-  {
-    "Id": 5,
-    "Name": "Toyota 86",
-    "Type": "Mobil",
-    "IsAvailable": true
+    "Brand": "Honda",
+    "Model": "250RR",
+    "State": 0
   }
 ]
