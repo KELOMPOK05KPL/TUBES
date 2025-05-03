@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Test_API_tubes.Models;
-//using Tubes_RentalAPI.Models;
+using Tubes_API.Helpers;
+
 namespace Tubes_API.Services
 {
     public class VehicleService
@@ -13,83 +14,17 @@ namespace Tubes_API.Services
             _riwayatService = riwayatService;
         }
 
-        public (bool success, string message) RentVehicle(int id, string namaPeminjam)
-        {
-            var vehicles = GetAll();
-            var vehicle = vehicles.FirstOrDefault(v => v.Id == id);
-
-            if (vehicle == null)
-            {
-                return (false, "Kendaraan tidak ditemukan");
-            }
-
-            if (vehicle.State != VehicleState.Available)
-            {
-                return (false, $"Kendaraan tidak tersedia (Status: {vehicle.State})");
-            }
-
-            // Update state kendaraan
-            vehicle.State = VehicleState.Rented;
-            SaveAll(vehicles);
-
-            // Tambahkan ke riwayat
-            var riwayatBaru = new RiwayatPeminjaman
-            {
-                VehicleId = vehicle.Id,
-                Brand = vehicle.Brand,
-                Type = vehicle.Type,
-                Peminjam = namaPeminjam,
-                TanggalPinjam = DateTime.Now,
-                TanggalKembali = null,
-                Status = "Dipinjam"
-            };
-            _riwayatService.TambahRiwayat(riwayatBaru);
-
-            return (true, "Peminjaman berhasil");
-        }
-
-        // Di Tubes_API/Services/VehicleService.cs
-        public (bool success, string message) ReturnVehicle(int id)
-        {
-            var vehicles = GetAll();
-            var vehicle = vehicles.FirstOrDefault(v => v.Id == id);
-
-            if (vehicle == null)
-            {
-                return (false, "Kendaraan tidak ditemukan");
-            }
-
-            if (vehicle.State != VehicleState.Rented)
-            {
-                return (false, $"Kendaraan tidak sedang dipinjam (Status: {vehicle.State})");
-            }
-
-            // Update state kendaraan
-            vehicle.State = VehicleState.Available;
-            SaveAll(vehicles);
-
-            // Update riwayat peminjaman
-            _riwayatService.UpdateRiwayatPengembalian(id);
-
-            return (true, "Pengembalian berhasil");
-        }
-
         public List<Vehicle> GetAll()
         {
-            if (!File.Exists(filePath))
-                return new List<Vehicle>();
-
-            string json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<List<Vehicle>>(json) ?? new List<Vehicle>();
-        }
-
-        public void SaveAll(List<Vehicle> vehicles)
-        {
-            string json = JsonSerializer.Serialize(vehicles, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            return FileRepository<Vehicle>.Load(filePath);
         }
 
         public Vehicle? GetById(int id) => GetAll().FirstOrDefault(v => v.Id == id);
+
+        public void SaveAll(List<Vehicle> vehicles)
+        {
+            FileRepository<Vehicle>.Save(filePath, vehicles);
+        }
 
         public void Add(Vehicle vehicle)
         {
@@ -108,7 +43,7 @@ namespace Tubes_API.Services
             {
                 vehicles[index].Brand = updated.Brand;
                 vehicles[index].Type = updated.Type;
-                // State tidak berubah di sini
+                // Tidak mengubah State saat update
                 SaveAll(vehicles);
             }
         }
@@ -120,20 +55,54 @@ namespace Tubes_API.Services
             SaveAll(updated);
         }
 
-        public bool RentVehicle(int id)
+        // Fitur peminjaman kendaraan
+        public (bool success, string message) RentVehicle(int id, string namaPeminjam)
         {
             var vehicles = GetAll();
             var vehicle = vehicles.FirstOrDefault(v => v.Id == id);
-            if (vehicle != null && vehicle.State == VehicleState.Available)
+
+            if (vehicle == null)
+                return (false, "Kendaraan tidak ditemukan");
+
+            if (vehicle.State != VehicleState.Available)
+                return (false, $"Kendaraan tidak tersedia (Status: {vehicle.State})");
+
+            vehicle.State = VehicleState.Rented;
+            SaveAll(vehicles);
+
+            var riwayatBaru = new RiwayatPeminjaman
             {
-                vehicle.State = VehicleState.Rented;
-                SaveAll(vehicles);
-                return true;
-            }
-            return false; // tidak bisa disewa
+                VehicleId = vehicle.Id,
+                Brand = vehicle.Brand,
+                Type = vehicle.Type,
+                Peminjam = namaPeminjam,
+                TanggalPinjam = DateTime.Now,
+                TanggalKembali = null,
+                Status = "Dipinjam"
+            };
+            _riwayatService.TambahRiwayat(riwayatBaru);
+
+            return (true, "Peminjaman berhasil");
         }
 
-        // Di VehicleService.cs - Hapus yang versi bool dan pertahankan yang ini:
-       
+        // Fitur pengembalian kendaraan
+        public (bool success, string message) ReturnVehicle(int id)
+        {
+            var vehicles = GetAll();
+            var vehicle = vehicles.FirstOrDefault(v => v.Id == id);
+
+            if (vehicle == null)
+                return (false, "Kendaraan tidak ditemukan");
+
+            if (vehicle.State != VehicleState.Rented)
+                return (false, $"Kendaraan tidak sedang dipinjam (Status: {vehicle.State})");
+
+            vehicle.State = VehicleState.Available;
+            SaveAll(vehicles);
+
+            _riwayatService.UpdateRiwayatPengembalian(id);
+
+            return (true, "Pengembalian berhasil");
+        }
     }
 }

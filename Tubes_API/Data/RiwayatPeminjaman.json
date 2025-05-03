@@ -36,6 +36,26 @@
     "Type": "Mobil",
     "Peminjam": "ilham",
     "TanggalPinjam": "2025-05-03T17:52:57.42349+07:00",
+    "TanggalKembali": "2025-05-03T23:56:26.7297539+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 5,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "ihsan",
+    "TanggalPinjam": "2025-05-03T23:29:32.8693205+07:00",
+    "TanggalKembali": "2025-05-03T23:53:19.1669496+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 6,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "Sassan",
+    "TanggalPinjam": "2025-05-03T23:56:00.323576+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
   }
