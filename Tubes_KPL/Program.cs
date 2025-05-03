@@ -1,64 +1,115 @@
-﻿using sewa_kendaraan;
-using sewa_kendaraan.fiturSewa.config;
-using sewa_kendaraan.fiturSewa.fitur;
-using sewa_kendaraan.fiturSewa.model;
-using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System;
+using Tubes_KPL.fiturSewa;
+using Tubes_KPL.Login_Register;
 
 class Program
 {
-    static async Task Main()
+    static async Task Main(string[] args)
     {
-        Console.WriteLine("\n=== Fitur Sewa Kendaraan ===");
+        var auth = new Login_Register();
+        bool isRunning = true;
 
-        var config = runtimeconfig.Load();
-
-        Console.WriteLine("Pilih jenis kendaraan:");
-        Console.WriteLine("1. Motor");
-        Console.WriteLine("2. Mobil");
-        Console.Write("Pilihan: ");
-        var input = Console.ReadLine();
-
-        string tipe = input switch
+        while (isRunning)
         {
-            "1" => "motor",
-            "2" => "mobil",
-            _ => ""
-        };
+            Console.Clear();
+            Console.WriteLine("=== Selamat Datang ===");
+            Console.WriteLine("1. Login");
+            Console.WriteLine("2. Register");
+            Console.WriteLine("3. Lihat semua user");
+            Console.WriteLine("4. Status login");
+            Console.WriteLine("5. Keluar");
+            Console.Write("Pilih: ");
+            var input = Console.ReadLine();
 
-        if (string.IsNullOrEmpty(tipe))
-        {
-            Console.WriteLine("Jenis kendaraan tidak valid.");
-            return;
+            switch (input)
+            {
+                case "1":
+                    Console.Write("Username: ");
+                    var usernameLogin = Console.ReadLine();
+                    Console.Write("Password: ");
+                    var passwordLogin = Console.ReadLine();
+
+                    auth.Trigger("login", usernameLogin, passwordLogin);
+                    if (auth.GetState() == Login_Register.State.Authenticated)
+                    {
+                        await MenuSetelahLogin(auth);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Login gagal. Tekan Enter untuk kembali...");
+                        Console.ReadLine();
+                    }
+                    break;
+
+                case "2":
+                    Console.Write("Username: ");
+                    var usernameReg = Console.ReadLine();
+                    Console.Write("Password: ");
+                    var passwordReg = Console.ReadLine();
+
+                    auth.Trigger("register", usernameReg, passwordReg);
+                    Console.WriteLine("Tekan Enter untuk kembali...");
+                    Console.ReadLine();
+                    break;
+
+                case "3":
+                    auth.ListUsers();
+                    Console.WriteLine("Tekan Enter untuk kembali...");
+                    Console.ReadLine();
+                    break;
+
+                case "4":
+                    Console.WriteLine("Status saat ini: " + auth.GetState());
+                    Console.WriteLine("Tekan Enter untuk kembali...");
+                    Console.ReadLine();
+                    break;
+
+                case "5":
+                    isRunning = false;
+                    Console.WriteLine("Program selesai.");
+                    break;
+
+                default:
+                    Console.WriteLine("Pilihan tidak valid.");
+                    Console.WriteLine("Tekan Enter untuk kembali...");
+                    Console.ReadLine();
+                    break;
+            }
         }
-
-        var semua = await AmbilKendaraanAsync();
-        var tersedia = semua
-            .Where(k => k.Type.Equals(tipe, StringComparison.OrdinalIgnoreCase) && k.IsAvailable)
-            .ToList();
-
-        if (tersedia.Count == 0)
-        {
-            Console.WriteLine($"Tidak ada {tipe} yang tersedia.");
-            return;
-        }
-
-        var sewa = new SewaKendaraan<VehicleDto>(tersedia, config, tipe);
-        sewa.Jalankan();
     }
 
-    static async Task<List<VehicleDto>> AmbilKendaraanAsync()
+    static async Task MenuSetelahLogin(Login_Register auth)
     {
-        string path = "data_kendaraan.json";
-        if (!File.Exists(path))
+        bool inMenu = true;
+        while (inMenu)
         {
-            Console.WriteLine("File data kendaraan tidak ditemukan.");
-            return new();
+            Console.Clear();
+            Console.WriteLine("=== Menu Setelah Login ===");
+            Console.WriteLine("1. Sewa Kendaraan");
+            Console.WriteLine("2. Logout");
+            Console.Write("Pilih: ");
+            var pilih = Console.ReadLine();
+
+            switch (pilih)
+            {
+                case "1":
+                    var penyewaan = new Penyewaan();
+                    await penyewaan.TampilkanMenu();
+                    Console.WriteLine("Tekan Enter untuk kembali...");
+                    Console.ReadLine();
+                    break;
+
+                case "2":
+                    auth.Logout();
+                    inMenu = false;
+                    break;
+
+                default:
+                    Console.WriteLine("Pilihan tidak valid.");
+                    Console.WriteLine("Tekan Enter untuk kembali...");
+                    Console.ReadLine();
+                    break;
+            }
         }
-
-        using var stream = File.OpenRead(path);
-        var data = await JsonSerializer.DeserializeAsync<List<VehicleDto>>(stream);
-        return data ?? new();
     }
-
 }

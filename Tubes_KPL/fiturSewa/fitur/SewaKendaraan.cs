@@ -1,10 +1,7 @@
-﻿using sewa_kendaraan.fiturSewa.config;
-using sewa_kendaraan.fiturSewa.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Tubes_KPL.fiturSewa.config;
+using Tubes_KPL.fiturSewa.model;
+
+using System.Text.Json;
 
 namespace sewa_kendaraan.fiturSewa.fitur
 {
@@ -13,6 +10,9 @@ namespace sewa_kendaraan.fiturSewa.fitur
         private List<T> DaftarKendaraan;
         private runtimeconfig Config;
         private string TipeKendaraan;
+
+        private string historyPath = "TransactionHistory.json";
+
 
         public SewaKendaraan(List<T> kendaraan, runtimeconfig config, string tipe)
         {
@@ -39,6 +39,9 @@ namespace sewa_kendaraan.fiturSewa.fitur
 
             dynamic kendaraan = DaftarKendaraan[pilih - 1];
 
+            Console.Write("Tanggal peminjaman (yyyy-MM-dd): ");
+            string tanggal = Console.ReadLine();
+
             Console.Write($"Lama sewa (1–{Config.MaxDuration} hari): ");
             if (!int.TryParse(Console.ReadLine(), out int hari) || hari < 1 || hari > Config.MaxDuration)
             {
@@ -49,7 +52,7 @@ namespace sewa_kendaraan.fiturSewa.fitur
             int harga = Config.GetHargaSewa(TipeKendaraan);
             int total = harga * hari;
 
-            Console.WriteLine($"\n{kendaraan.Brand} {kendaraan.Model} akan disewa selama {hari} hari.");
+            Console.WriteLine($"\n{kendaraan.Brand} {kendaraan.Model} akan disewa mulai {tanggal} selama {hari} hari.");
             Console.WriteLine($"Harga per hari: {Config.Currency} {harga:N0}");
             Console.WriteLine($"Total: {Config.Currency} {total:N0}");
 
@@ -57,12 +60,50 @@ namespace sewa_kendaraan.fiturSewa.fitur
             var konfirmasi = Console.ReadLine();
             if (konfirmasi?.ToLower() == "y")
             {
-                Console.WriteLine(" Peminjaman berhasil.");
+                Console.WriteLine("\nPeminjaman berhasil.");
+                TampilkanDetailDanSimpan(kendaraan, tanggal, hari, total);
             }
             else
             {
-                Console.WriteLine(" Peminjaman dibatalkan.");
+                Console.WriteLine("Peminjaman dibatalkan.");
             }
+        }
+
+        private void TampilkanDetailDanSimpan(dynamic kendaraan, string tanggal, int hari, int total)
+        {
+            var transaksi = new Transaction
+            {
+                Vehicle = $"{kendaraan.Brand} {kendaraan.Model}",
+                Type = TipeKendaraan,
+                TanggalPinjam = tanggal,
+                LamaHari = hari,
+                TotalHarga = total
+            };
+
+            Console.WriteLine("\n--- Detail Transaksi ---");
+            Console.WriteLine($"Kendaraan     : {transaksi.Vehicle}");
+            Console.WriteLine($"Jenis         : {transaksi.Type}");
+            Console.WriteLine($"Tanggal Pinjam: {transaksi.TanggalPinjam}");
+            Console.WriteLine($"Durasi        : {transaksi.LamaHari} hari");
+            Console.WriteLine($"Total Harga   : Rp {transaksi.TotalHarga:N0}");
+
+            SimpanTransaksi(transaksi);
+
+            
+        }
+
+        private void SimpanTransaksi(Transaction record)
+        {
+            List<Transaction> history = new();
+
+            if (File.Exists(historyPath))
+            {
+                var json = File.ReadAllText(historyPath);
+                history = JsonSerializer.Deserialize<List<Transaction>>(json) ?? new();
+            }
+
+            history.Add(record);
+            File.WriteAllText(historyPath, JsonSerializer.Serialize(history, new JsonSerializerOptions { WriteIndented = true }));
         }
     }
 }

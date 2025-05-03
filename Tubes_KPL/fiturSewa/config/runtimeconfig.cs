@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace sewa_kendaraan.fiturSewa.config
+namespace Tubes_KPL.fiturSewa.config
 {
     public class runtimeconfig
     {

@@ -1,0 +1,9 @@
+[
+  {
+    "TanggalPeminjaman": "2025-05-03",
+    "LamaHari": 3,
+    "NamaKendaraan": "Honda Beat",
+    "HargaTotal": 150000,
+    "HargaPerHari": 50000
+  }
+]
