@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "Type": "Mobil",
+    "Brand": "Toyota",
+    "Model": "Avanza",
+    "State": 1
+  },
+  {
+    "Id": 2,
+    "Type": "Motor",
+    "Brand": "Honda",
+    "Model": "250RR",
+    "State": 0
+  }
+]

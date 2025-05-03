@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tubes_API\Tubes_API.csproj" />
+  </ItemGroup>
+
 </Project>
