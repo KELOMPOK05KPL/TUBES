@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Tubes_KPL.LihatKendaraan;
 using Tubes_KPL.Services;
+using Tubes_KPL.Pengembalian.Controller;
 
 namespace Tubes_KPL
 {
@@ -11,7 +12,7 @@ namespace Tubes_KPL
         static async Task Main(string[] args)
         {
             var httpClient = new HttpClient();
-            var baseUrl = "http://localhost:5176";
+            var baseUrl = "https://localhost:44376"; 
 
             var kendaraanViewer = new KendaraanViewer(httpClient, baseUrl);
             var peminjamanService = new PeminjamanService(httpClient, baseUrl);
@@ -62,15 +63,16 @@ namespace Tubes_KPL
                         Console.Write("Masukkan ID Kendaraan yang ingin dikembalikan: ");
                         if (int.TryParse(Console.ReadLine(), out int returnId))
                         {
-                            var success = await peminjamanService.KembalikanKendaraan(returnId);
-                            if (success)
-                            {
-                                Console.WriteLine("Kendaraan telah dikembalikan!");
-                            }
+                            var rentalService = new RentalService(httpClient, baseUrl);
+                            bool success = await rentalService.KembalikanKendaraanAsync(returnId);
+                            Console.WriteLine(success ? "Kendaraan telah dikembalikan!" : "Gagal mengembalikan kendaraan.");
                         }
                         break;
                     default:
                         Console.WriteLine("Pilihan tidak valid!");
+                        break;
+                    case "5":
+                        exit = true;
                         break;
                 }
             }

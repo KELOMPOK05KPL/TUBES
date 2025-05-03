@@ -8,9 +8,16 @@
   },
   {
     "Id": 2,
-    "Type": "Motor",
-    "Brand": "Honda",
+    "Type": "Toyota",
+    "Brand": "string",
     "Model": "250RR",
-    "State": 0
+    "State": 1
+  },
+  {
+    "Id": 3,
+    "Type": "Mobil",
+    "Brand": "Toyota",
+    "Model": "Ayla",
+    "State": 1
   }
 ]

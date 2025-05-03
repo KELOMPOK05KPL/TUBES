@@ -9,7 +9,7 @@ namespace Test_API_tubes.Controllers;
 [Route("api/users")]
 public class UserController : ControllerBase
 {
-    private readonly string filePath = "D:\\My Code\\GUI C#\\TUBES\\Tubes_KPL\\Tubes_API\\Repositories\\user.json";
+    private readonly string filePath = "D:\\KONSTRUKSI\\Tubeskpl\\Tubes_API\\Data\\user.json";
 
     private List<User> LoadUsers()
     {

@@ -38,5 +38,25 @@
     "TanggalPinjam": "2025-05-03T17:52:57.42349+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
+  },
+  {
+    "Id": 5,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "Yuri",
+    "TanggalPinjam": "2025-05-03T22:44:43.6350162+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 6,
+    "VehicleId": 3,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "triana",
+    "TanggalPinjam": "2025-05-04T03:30:11.2390358+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
   }
 ]
