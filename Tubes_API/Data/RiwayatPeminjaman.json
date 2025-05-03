@@ -1,0 +1,42 @@
+[
+  {
+    "Id": 1,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "ilham",
+    "TanggalPinjam": "2025-05-03T13:28:13.6884731+07:00",
+    "TanggalKembali": "2025-05-03T13:53:33.4127394+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 2,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "ilham",
+    "TanggalPinjam": "2025-05-03T13:52:17.5245722+07:00",
+    "TanggalKembali": "2025-05-03T13:53:03.7998023+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 3,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "agus",
+    "TanggalPinjam": "2025-05-03T13:53:57.6728752+07:00",
+    "TanggalKembali": "2025-05-03T13:55:06.4641078+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 4,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "ilham",
+    "TanggalPinjam": "2025-05-03T17:52:57.42349+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  }
+]
