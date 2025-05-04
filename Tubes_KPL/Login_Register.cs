@@ -17,7 +17,7 @@ public class Login_Register
 
     private State currentState;
     private readonly HttpClient httpClient;
-    private readonly string apiBaseUrl = "https://localhost:44376/api/User"; //sesuain sama localhost swagger klean
+    private readonly string apiBaseUrl = "https://localhost:44376/api/User"; 
     private string currentUsername = "";
 
     public Login_Register()
@@ -127,6 +127,42 @@ public class Login_Register
             currentState = State.Failed;
         }
     }
+
+    public async Task<bool> TriggerLoginAsync(string username, string password)
+    {
+        if (currentState != State.Idle)
+        {
+            Console.WriteLine("Tidak bisa login sekarang. Sistem sedang dalam keadaan: " + currentState);
+            return false;
+        }
+
+        currentState = State.LoggingIn;
+        try
+        {
+            var response = await httpClient.GetAsync($"{apiBaseUrl}/login?username={username}&password={password}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Login berhasil! Selamat datang " + username);
+                currentUsername = username;
+                currentState = State.Authenticated;
+                return true;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Login gagal: " + error);
+                currentState = State.Failed;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Gagal menghubungi API: " + ex.Message);
+            currentState = State.Failed;
+            return false;
+        }
+    }
+
 
     public void Logout()
     {
