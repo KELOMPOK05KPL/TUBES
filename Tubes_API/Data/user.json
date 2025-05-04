@@ -1,9 +1,9 @@
 ﻿[
   {
     "Id": 1,
-    "Username": "admin",
-    "Password": "1234",
-    "Role": "admin"
+    "Username": "ilham",
+    "Password": "user1234",
+    "Role": "user"
   },
   {
     "Id": 2,
