@@ -16,6 +16,7 @@ namespace Tubes_KPL
 
             var kendaraanViewer = new KendaraanViewer(httpClient, baseUrl);
             var peminjamanService = new PeminjamanService(httpClient, baseUrl);
+            var vehicleManagement = new VehicleManagementService(httpClient, baseUrl);
 
             bool exit = false;
             while (!exit)
@@ -27,7 +28,8 @@ namespace Tubes_KPL
                 Console.WriteLine("2. Pinjam Kendaraan");
                 Console.WriteLine("3. Lihat Riwayat Peminjaman");
                 Console.WriteLine("4. Kembalikan Kendaraan");
-                Console.WriteLine("5. Keluar");
+                Console.WriteLine("5. Manajemen Kendaraan (Admin)");
+                Console.WriteLine("6. Keluar");
                 Console.Write("Pilihan Anda: ");
 
                 switch (Console.ReadLine())
@@ -69,6 +71,12 @@ namespace Tubes_KPL
                                 Console.WriteLine("Kendaraan telah dikembalikan!");
                             }
                         }
+                        break;
+                    case "5":
+                        await vehicleManagement.HandleVehicleManagement();
+                        break;
+                    case "6":
+                        exit = true;
                         break;
                     default:
                         Console.WriteLine("Pilihan tidak valid!");
