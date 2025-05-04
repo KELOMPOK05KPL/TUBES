@@ -12,5 +12,12 @@
     "Brand": "Honda",
     "Model": "250RR",
     "State": 0
+  },
+  {
+    "Id": 3,
+    "Type": "Mobil",
+    "Brand": "BMW",
+    "Model": "M Series",
+    "State": 0
   }
 ]
