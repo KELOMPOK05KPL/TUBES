@@ -56,6 +56,16 @@
     "Type": "Motor",
     "Peminjam": "Sassan",
     "TanggalPinjam": "2025-05-03T23:56:00.323576+07:00",
+    "TanggalKembali": "2025-05-04T09:23:04.121938+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 7,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "jeki",
+    "TanggalPinjam": "2025-05-04T09:22:46.6657967+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
   }

@@ -61,55 +61,31 @@ public class VehicleController : ControllerBase
     }
 
     [HttpPost("{id}/{actionType}")]
-    public IActionResult HandleVehicleAction(
-    int id,
-    string actionType,
-    [FromBody] ActionRequest? request = null)
+    public IActionResult HandleVehicleAction(int id, string actionType, [FromBody] ActionRequest? request = null)
     {
-        var actions = new Dictionary<string, Func<int, ActionRequest?, IActionResult>>(
-            StringComparer.OrdinalIgnoreCase)
+        var actions = new Dictionary<string, Func<int, ActionRequest?, IActionResult>>(StringComparer.OrdinalIgnoreCase)
     {
-        {
-            "rent", (vid, req) =>
+        { "rent", (vid, req) =>
             {
-                if (req == null || string.IsNullOrEmpty(req.NamaPeminjam))
-                    return BadRequest("NamaPeminjam wajib diisi untuk penyewaan");
-
+                if (req == null || string.IsNullOrWhiteSpace(req.NamaPeminjam))
+                    return BadRequest("Nama peminjam harus diisi.");
                 var result = _service.RentVehicle(vid, req.NamaPeminjam);
-                return new OkObjectResult(new {
-                    success = true,
-                    message = result.message,
-                    vehicleId = vid
-                });
+                return result.success ? Ok(result) : BadRequest(result.message);
             }
         },
-        {
-            "return", (vid, _) =>
+        { "return", (vid, _) =>
             {
                 var result = _service.ReturnVehicle(vid);
-                if (!result.success)
-                    return BadRequest(result.message);
-
-                return new OkObjectResult(new {
-                    success = true,
-                    message = result.message,
-                    vehicleId = vid
-                });
+                return result.success ? Ok(result) : BadRequest(result.message);
             }
         }
     };
 
         if (!actions.TryGetValue(actionType, out var handler))
-            return BadRequest("Action tidak valid. Gunakan 'rent' atau 'return'");
+            return BadRequest("Action tidak dikenal. Gunakan 'rent' atau 'return'.");
 
-        try
-        {
-            return handler(id, request);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Terjadi error: {ex.Message}");
-        }
+        return handler(id, request);
     }
+
 
 }
