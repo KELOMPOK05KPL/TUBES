@@ -22,5 +22,11 @@
     "Username": "hani",
     "Password": "user43",
     "Role": "User"
+  },
+  {
+    "Id": 5,
+    "Username": "muthi",
+    "Password": "muthi123",
+    "Role": "User"
   }
 ]
