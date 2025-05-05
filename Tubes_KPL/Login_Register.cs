@@ -26,7 +26,12 @@ public class Login_Register
         httpClient = new HttpClient();
         Console.WriteLine("Sistem dalam keadaan Idle");
     }
-
+    public Login_Register(HttpClient injectedClient)
+    {
+        currentState = State.Idle;
+        httpClient = injectedClient;
+        Console.WriteLine("Sistem dalam keadaan Idle (Injected HttpClient)");
+    }
     public async void Trigger(string action, string username = "", string password = "")
     {
         switch (currentState)

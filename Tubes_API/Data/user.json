@@ -34,5 +34,11 @@
     "Username": "ihsan",
     "Password": "ihsan321",
     "Role": "User"
+  },
+  {
+    "Id": 7,
+    "Username": "irfan ",
+    "Password": "irfan345",
+    "Role": "User"
   }
 ]
