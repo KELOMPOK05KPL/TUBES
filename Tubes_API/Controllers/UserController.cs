@@ -45,14 +45,6 @@ public class UserController : ControllerBase
             ? JsonSerializer.Deserialize<List<User>>(System.IO.File.ReadAllText(filePath)) ?? new List<User>()
             : new List<User>();
 
-    [HttpPost]
-    public IActionResult AddUser([FromBody] User newUser)
-    {
-        var users = LoadUsers();
-        newUser.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
-        users.Add(newUser);
-        SaveUsers(users);
-        return CreatedAtAction(nameof(GetAllUsers), new { id = newUser.Id }, newUser);
-    }
+    private void SaveUsers(List<User> users) =>
+        System.IO.File.WriteAllText(filePath, JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true }));
 }
-
