@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Tubes_API\Tubes_API.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pengembalian\configuration\" />
-  </ItemGroup>
-
 </Project>
