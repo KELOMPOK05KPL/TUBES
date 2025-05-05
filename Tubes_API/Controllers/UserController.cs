@@ -1,29 +1,36 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Text.Json;
 using Test_API_tubes.Models;
-
-namespace Test_API_tubes.Controllers;
+using System.Linq;
 
 [ApiController]
-[Route("api/users")]
+[Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly string filePath = "D:\\My Code\\GUI C#\\TUBES\\Tubes_KPL\\Tubes_API\\Repositories\\user.json";
+    private readonly string filePath = "Data/user.json";
 
-    private List<User> LoadUsers()
+    [HttpPost("register")]
+    public IActionResult Register([FromBody] User user)
     {
-        if (!System.IO.File.Exists(filePath))
-            return new List<User>();
+        var users = LoadUsers();
 
-        var json = System.IO.File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+        if (users.Any(u => u.Username.Equals(user.Username, StringComparison.OrdinalIgnoreCase)))
+            return BadRequest("Username sudah ada");
+
+        user.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
+        users.Add(user);
+        SaveUsers(users);
+        return Ok(user);
     }
 
-    private void SaveUsers(List<User> users)
+    [HttpGet("login")]
+    public IActionResult Login(string username, string password)
     {
-        var json = JsonSerializer.Serialize(users);
-        System.IO.File.WriteAllText(filePath, json);
+        var users = LoadUsers();
+        var user = users.FirstOrDefault(u => u.Username == username && u.Password == password);
+
+        if (user == null) return Unauthorized();
+        return Ok(user);
     }
 
     [HttpGet]
@@ -33,28 +40,11 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteUser(int id)
-    {
-        var users = LoadUsers();
-        var userToDelete = users.FirstOrDefault(u => u.Id == id);
+    private List<User> LoadUsers() =>
+        System.IO.File.Exists(filePath)
+            ? JsonSerializer.Deserialize<List<User>>(System.IO.File.ReadAllText(filePath)) ?? new List<User>()
+            : new List<User>();
 
-        if (userToDelete == null)
-            return NotFound("User tidak ditemukan.");
-
-        users.Remove(userToDelete);
-        SaveUsers(users);
-        return Ok("User berhasil dihapus.");
-    }
-
-    [HttpPost]
-    public IActionResult AddUser([FromBody] User newUser)
-    {
-        var users = LoadUsers();
-        newUser.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
-        users.Add(newUser);
-        SaveUsers(users);
-        return CreatedAtAction(nameof(GetAllUsers), new { id = newUser.Id }, newUser);
-    }
+    private void SaveUsers(List<User> users) =>
+        System.IO.File.WriteAllText(filePath, JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true }));
 }
-
