@@ -100,6 +100,9 @@ namespace Tubes_KPL
                         var penyewaan = new Penyewaan();
                         await penyewaan.TampilkanMenu();
                         break;
+
+                       
+
                         //Console.Write("Masukkan ID Kendaraan yang ingin dipinjam: ");
                         //if (int.TryParse(Console.ReadLine(), out int id))
                         //{
@@ -119,6 +122,7 @@ namespace Tubes_KPL
                         //    }
                         //}
                         break;
+
 
                     case "3":
                         await peminjamanService.TampilkanRiwayatPeminjaman();

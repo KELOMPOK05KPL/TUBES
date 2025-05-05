@@ -1,13 +1,21 @@
 ﻿using System.Net.Http;
 using System.Text.Json;
 using System.Text;
-using model;
 using config;
 using System.Net.Http.Json;
 using Test_API_tubes.Models;
 
 namespace controller
 {
+    public class Transaction
+    {
+        public string VehicleId { get; set; }
+        public string VehicleName { get; set; }
+        public string TanggalSewa { get; set; }
+        public int LamaHari { get; set; }
+        public int TotalHarga { get; set; }
+    }
+
     public class Sistemsewa<T> where T : VehicleDto
     {
         private readonly List<T> kendaraanTersedia;
@@ -47,13 +55,13 @@ namespace controller
 
             var kendaraan = kendaraanTersedia.First(k => k.Id == id);
 
-            // Menampilkan detail kendaraan
+            
             Console.WriteLine($"\nDetail Kendaraan:");
             Console.WriteLine($"Merek   : {kendaraan.Brand}");
             Console.WriteLine($"Model   : {kendaraan.Model}");
             Console.WriteLine($"Status  : {(kendaraan.State == 0 ? "Available" : "Rented")}");
 
-            // Ambil tipe kendaraan dari API untuk menghitung harga
+         
             string tipe = kendaraan.Type.ToLower();
             if (!config.harga_sewa.ContainsKey(tipe))
             {
@@ -81,7 +89,7 @@ namespace controller
                 return;
             }
 
-            // Proses peminjaman ke API
+            
             var success = await PinjamKendaraan(id, namaPeminjam);
             if (!success)
             {
@@ -92,7 +100,6 @@ namespace controller
             Console.Clear();
             Console.WriteLine("Silahkan ambil kendaraan!");
 
-            // Simpan riwayat peminjaman tanpa menyimpan total harga
             await SimpanRiwayatLokal(new RiwayatPeminjaman
             {
                 VehicleId = kendaraan.Id,
@@ -103,7 +110,6 @@ namespace controller
                 Status = "Dipinjam"
             });
 
-            // **Pastikan harga tetap tampil di fitur penyewaan**
             Console.WriteLine($"\nRingkasan Penyewaan:");
             Console.WriteLine($"Kendaraan  : {kendaraan.Brand} {kendaraan.Model} (ID: {kendaraan.Id})");
             Console.WriteLine($"Tanggal    : {DateTime.Now:dd/MM/yyyy}");
@@ -128,9 +134,8 @@ namespace controller
                 return false;
             }
 
-            // Verifikasi status setelah peminjaman
             var updatedVehicle = await GetVehicle(id);
-            if (updatedVehicle.State != 1) // 1 = Rented
+            if (updatedVehicle.State != 1) 
             {
                 Console.WriteLine("Peminjaman gagal - status tidak berubah");
                 return false;
