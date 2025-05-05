@@ -1,3 +1,5 @@
+
+using controller;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,10 +13,11 @@ namespace Tubes_KPL
         static async Task Main(string[] args)
         {
             var httpClient = new HttpClient();
-            var baseUrl = "http://localhost:44376"; 
+            var baseUrl = "https://localhost:44376";
 
             var kendaraanViewer = new KendaraanViewer(httpClient, baseUrl);
             var peminjamanService = new PeminjamanService(httpClient, baseUrl);
+            var vehicleManagement = new VehicleManagementService(httpClient, baseUrl);
             var loginRegister = new Login_Register();
 
             string loggedInUser = "";
@@ -71,7 +74,7 @@ namespace Tubes_KPL
                 await Task.Delay(1000);
             }
 
-            // Masuk ke menu utama setelah login
+
             bool exit = false;
             while (!exit)
             {
@@ -82,7 +85,8 @@ namespace Tubes_KPL
                 Console.WriteLine("2. Pinjam Kendaraan");
                 Console.WriteLine("3. Lihat Riwayat Peminjaman");
                 Console.WriteLine("4. Kembalikan Kendaraan");
-                Console.WriteLine("5. Logout dan Keluar");
+                Console.WriteLine("5. Manajemen Kendaraan (Admin)");
+                Console.WriteLine("6. Keluar");
                 Console.Write("Pilihan Anda: ");
 
                 switch (Console.ReadLine())
@@ -93,21 +97,27 @@ namespace Tubes_KPL
                         break;
 
                     case "2":
-                        Console.Write("Masukkan ID Kendaraan yang ingin dipinjam: ");
-                        if (int.TryParse(Console.ReadLine(), out int id))
-                        {
-                            await kendaraanViewer.TampilkanDetailKendaraan(id);
-                            Console.Write($"Apakah Anda yakin ingin meminjam kendaraan ini? (y/n): ");
-                            if (Console.ReadLine().ToLower() == "y")
-                            {
-                                var success = await peminjamanService.PinjamKendaraan(id, loggedInUser);
-                                if (success)
-                                {
-                                    Console.Clear();
-                                    Console.WriteLine("Silahkan ambil kendaraan!");
-                                }
-                            }
-                        }
+                        var penyewaan = new Penyewaan();
+                        await penyewaan.TampilkanMenu();
+                        break;
+                        //Console.Write("Masukkan ID Kendaraan yang ingin dipinjam: ");
+                        //if (int.TryParse(Console.ReadLine(), out int id))
+                        //{
+                        //    await kendaraanViewer.TampilkanDetailKendaraan(id);
+                        //    Console.Write("Masukkan nama Anda: ");
+                        //    var namaPeminjam = Console.ReadLine();
+
+                        //    Console.Write($"Apakah Anda yakin ingin meminjam kendaraan ini? (y/n): ");
+                        //    if (Console.ReadLine().ToLower() == "y")
+                        //    {
+                        //        var success = await peminjamanService.PinjamKendaraan(id, namaPeminjam);
+                        //        if (success)
+                        //        {
+                        //            Console.Clear();
+                        //            Console.WriteLine("Silahkan ambil kendaraan!");
+                        //        }
+                        //    }
+                        //}
                         break;
 
                     case "3":
@@ -125,13 +135,12 @@ namespace Tubes_KPL
                             }
                         }
                         break;
-
                     case "5":
-                        loginRegister.Logout();
-                        Console.WriteLine("Terima kasih telah menggunakan aplikasi.");
+                        await vehicleManagement.HandleVehicleManagement();
+                        break;
+                    case "6":
                         exit = true;
                         break;
-
                     default:
                         Console.WriteLine("Pilihan tidak valid!");
                         break;
