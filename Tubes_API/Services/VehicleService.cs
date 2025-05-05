@@ -6,9 +6,8 @@ namespace Tubes_API.Services
 {
     public class VehicleService
     {
-        private readonly string filePath = "Data/Vehicles.json";
+        private readonly string filePath = "Data/vehicles.json";
         private readonly RiwayatService _riwayatService;
-        
 
         public VehicleService(RiwayatService riwayatService)
         {
@@ -93,19 +92,17 @@ namespace Tubes_API.Services
             var vehicle = vehicles.FirstOrDefault(v => v.Id == id);
 
             if (vehicle == null)
-                return (false, "Kendaraan tidak ditemukan.");
+                return (false, "Kendaraan tidak ditemukan");
 
             if (vehicle.State != VehicleState.Rented)
-                return (false, "Kendaraan tidak sedang dipinjam.");
+                return (false, $"Kendaraan tidak sedang dipinjam (Status: {vehicle.State})");
 
-            // Perbarui status kendaraan
             vehicle.State = VehicleState.Available;
-
-            // Simpan perubahan ke file
             SaveAll(vehicles);
 
-            return (true, "Kendaraan berhasil dikembalikan.");
-        }
+            _riwayatService.UpdateRiwayatPengembalian(id);
 
+            return (true, "Pengembalian berhasil");
+        }
     }
 }

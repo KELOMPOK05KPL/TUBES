@@ -4,8 +4,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Tubes_KPL.LihatKendaraan;
+using Tubes_KPL.Pengembalian;
 using Tubes_KPL.Services;
-using Tubes_KPL.Pengembalian.Controller;
 
 namespace Tubes_KPL
 {
@@ -14,12 +14,13 @@ namespace Tubes_KPL
         static async Task Main(string[] args)
         {
             var httpClient = new HttpClient();
-            var baseUrl = "http://localhost:5176";
-
+            var baseUrl = "https://localhost:44376";
+            var _riwayatFilePath = "Data/RiwayatPeminjaman.json";
             var kendaraanViewer = new KendaraanViewer(httpClient, baseUrl);
             var peminjamanService = new PeminjamanService(httpClient, baseUrl);
             var vehicleManagement = new VehicleManagementService(httpClient, baseUrl);
             var loginRegister = new Login_Register();
+            var pengembalianKendaraan = new PengembalianKendaraan(httpClient, baseUrl, _riwayatFilePath);
 
             string loggedInUser = "";
             bool isLoggedIn = false;
@@ -101,9 +102,6 @@ namespace Tubes_KPL
                         var penyewaan = new Penyewaan();
                         await penyewaan.TampilkanMenu();
                         break;
-
-                       
-
                         //Console.Write("Masukkan ID Kendaraan yang ingin dipinjam: ");
                         //if (int.TryParse(Console.ReadLine(), out int id))
                         //{
@@ -124,19 +122,12 @@ namespace Tubes_KPL
                         //}
                         break;
 
-
                     case "3":
-                        await peminjamanService.TampilkanRiwayat();
+                        await peminjamanService.TampilkanRiwayatPeminjaman();
                         break;
 
                     case "4":
-                        Console.Write("Masukkan ID Kendaraan yang ingin dikembalikan: ");
-                        if (int.TryParse(Console.ReadLine(), out int returnId))
-                        {
-                            var rentalService = new RentalService(httpClient, baseUrl);
-                            bool success = await rentalService.KembalikanKendaraanAsync(returnId);
-                            Console.WriteLine(success ? "Kendaraan telah dikembalikan!" : "Gagal mengembalikan kendaraan.");
-                        }
+                        await pengembalianKendaraan.TampilkanMenuPengembalian(); // Memanggil fitur pengembalian kendaraan
                         break;
                     case "5":
                         await vehicleManagement.HandleVehicleManagement();
@@ -146,9 +137,6 @@ namespace Tubes_KPL
                         break;
                     default:
                         Console.WriteLine("Pilihan tidak valid!");
-                        break;
-                    case "5":
-                        exit = true;
                         break;
                 }
 

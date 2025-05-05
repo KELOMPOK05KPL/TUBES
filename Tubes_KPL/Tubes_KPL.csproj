@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pengembalian\Features\**" />
+    <Compile Remove="Pengembalian\Models\**" />
+    <EmbeddedResource Remove="Pengembalian\Features\**" />
+    <EmbeddedResource Remove="Pengembalian\Models\**" />
+    <None Remove="Pengembalian\Features\**" />
+    <None Remove="Pengembalian\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Tubes_API\Tubes_API.csproj" />
   </ItemGroup>
 
@@ -15,11 +24,6 @@
     <None Update="rental_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pengembalian\Features\" />
-    <Folder Include="Pengembalian\Models\" />
   </ItemGroup>
 
 </Project>

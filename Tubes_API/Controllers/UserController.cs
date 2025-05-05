@@ -7,7 +7,7 @@ using System.Linq;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly string filePath = "D:\\My Code\\GUI C#\\TUBES\\Tubes_KPL\\Tubes_API\\Repositories\\user.json";
+    private readonly string filePath = "Data/user.json";
 
     [HttpPost("register")]
     public IActionResult Register([FromBody] User user)

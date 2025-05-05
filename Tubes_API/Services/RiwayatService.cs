@@ -11,7 +11,7 @@ namespace Tubes_API.Services
 {
     public class RiwayatService
     {
-        private readonly string _filePath = "Data/RiwayatPeminjaman.json";
+        private readonly string _filePath = "Data/riwayatPeminjaman.json";
 
         public List<RiwayatPeminjaman> GetAllRiwayat()
         {

@@ -1,4 +1,4 @@
-﻿// File: Services/PeminjamanServiceTableDriven.cs
+﻿// File: Tubes_KPL/Services/PeminjamanService.cs
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -6,8 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Test_API_tubes.Models;
-using System.Collections.Generic;
-using System.Linq;
+//using Tubes_API.Models;
 
 namespace Tubes_KPL.Services
 {
@@ -17,85 +16,80 @@ namespace Tubes_KPL.Services
         private readonly string _baseUrl;
         private readonly string _riwayatFilePath = "Data/RiwayatPeminjaman.json";
 
-        private readonly Dictionary<string, Func<int, Task<bool>>> _actionHandlers;
-
         public PeminjamanService(HttpClient httpClient, string baseUrl)
         {
             _httpClient = httpClient;
             _baseUrl = baseUrl.TrimEnd('/');
-
-            // Table Driven
-            _actionHandlers = new Dictionary<string, Func<int, Task<bool>>>
-            {
-                { "rent", id => ProsesPeminjaman(id) },
-                { "return", id => ProsesPengembalian(id) }
-            };
         }
 
-        public async Task<bool> HandleAction(string action, int vehicleId)
+        public async Task<bool> PinjamKendaraan(int id, string namaPeminjam)
         {
-            if (_actionHandlers.TryGetValue(action.ToLower(), out var handler))
-                return await handler(vehicleId);
-
-            Console.WriteLine("Aksi tidak dikenal.");
-            return false;
-        }
-
-        private async Task<bool> ProsesPeminjaman(int id)
-        {
-            var vehicle = await GetVehicle(id);
-            if (!IsVehicleAvailable(vehicle)) return false;
-
-            var request = new { NamaPeminjam = "User" }; 
-            if (!await SendPostRequest($"{_baseUrl}/api/vehicles/{id}/rent", request))
-                return false;
-
-            var updated = await GetVehicle(id);
-            if (updated.State != VehicleState.Rented)
+            try
             {
-                Console.WriteLine("Status kendaraan tidak berubah setelah peminjaman.");
+                Console.WriteLine($"\nMemproses peminjaman kendaraan ID: {id}...");
+
+                // 1. Verifikasi kendaraan tersedia
+                var vehicle = await GetVehicle(id);
+                if (vehicle == null)
+                {
+                    Console.WriteLine("Kendaraan tidak ditemukan!");
+                    return false;
+                }
+
+                Console.WriteLine($"Status awal: {vehicle.State}");
+                if (vehicle.State != VehicleState.Available)
+                {
+                    Console.WriteLine($"Kendaraan tidak tersedia. Status saat ini: {vehicle.State}");
+                    return false;
+                }
+
+                // 2. Proses peminjaman ke API
+                var request = new { NamaPeminjam = namaPeminjam };
+                var content = new StringContent(
+                    JsonSerializer.Serialize(request),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PostAsync(
+                    $"{_baseUrl}/api/vehicles/{id}/rent",
+                    content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Gagal meminjam kendaraan. Error: {errorContent}");
+                    return false;
+                }
+
+                // 3. Verifikasi status setelah peminjaman
+                var updatedVehicle = await GetVehicle(id);
+                if (updatedVehicle.State != VehicleState.Rented)
+                {
+                    Console.WriteLine("Peminjaman gagal - status tidak berubah");
+                    return false;
+                }
+
+                // 4. Simpan riwayat peminjaman lokal (backup)
+                await SimpanRiwayatLokal(new RiwayatPeminjaman
+                {
+                    VehicleId = id,
+                    Brand = vehicle.Brand,
+                    Type = vehicle.Type,
+                    Peminjam = namaPeminjam,
+                    TanggalPinjam = DateTime.Now,
+                    Status = "Dipinjam"
+                });
+
+                Console.WriteLine("Peminjaman berhasil dicatat!");
+                Console.WriteLine($"Kendaraan {vehicle.Brand} {vehicle.Type} berhasil dipinjam oleh {namaPeminjam}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
-
-            await SimpanRiwayatLokal(new RiwayatPeminjaman
-            {
-                VehicleId = id,
-                Brand = vehicle.Brand,
-                Type = vehicle.Type,
-                Peminjam = request.NamaPeminjam,
-                TanggalPinjam = DateTime.Now,
-                Status = "Dipinjam"
-            });
-
-            Console.WriteLine($"Kendaraan {vehicle.Brand} {vehicle.Type} berhasil dipinjam.");
-            return true;
         }
-
-        private async Task<bool> ProsesPengembalian(int id)
-        {
-            var vehicle = await GetVehicle(id);
-            if (vehicle?.State != VehicleState.Rented)
-            {
-                Console.WriteLine("Kendaraan tidak sedang dipinjam atau tidak ditemukan.");
-                return false;
-            }
-
-            if (!await SendPostRequest($"{_baseUrl}/api/vehicles/{id}/return", null))
-                return false;
-
-            var updated = await GetVehicle(id);
-            if (updated.State != VehicleState.Available)
-            {
-                Console.WriteLine("Status kendaraan tidak berubah setelah pengembalian.");
-                return false;
-            }
-
-            await UpdateRiwayatLokal(id);
-            Console.WriteLine("Pengembalian berhasil.");
-            return true;
-        }
-
-        //Reusable Code
 
         private async Task<Vehicle> GetVehicle(int id)
         {
@@ -104,56 +98,30 @@ namespace Tubes_KPL.Services
             return await response.Content.ReadFromJsonAsync<Vehicle>();
         }
 
-        private bool IsVehicleAvailable(Vehicle vehicle)
-        {
-            if (vehicle == null)
-            {
-                Console.WriteLine("Kendaraan tidak ditemukan.");
-                return false;
-            }
-
-            if (vehicle.State != VehicleState.Available)
-            {
-                Console.WriteLine($"Kendaraan tidak tersedia. Status: {vehicle.State}");
-                return false;
-            }
-
-            return true;
-        }
-
-        private async Task<bool> SendPostRequest(string url, object data)
-        {
-            var content = data != null
-                ? new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json")
-                : null;
-
-            var response = await _httpClient.PostAsync(url, content);
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"Gagal melakukan request. Error: {await response.Content.ReadAsStringAsync()}");
-                return false;
-            }
-
-            return true;
-        }
-
         private async Task SimpanRiwayatLokal(RiwayatPeminjaman riwayat)
         {
             try
             {
-                List<RiwayatPeminjaman> list = new();
+                List<RiwayatPeminjaman> riwayatList;
+
                 if (System.IO.File.Exists(_riwayatFilePath))
                 {
                     var json = await System.IO.File.ReadAllTextAsync(_riwayatFilePath);
-                    list = JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json) ?? new();
+                    riwayatList = JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json) ?? new List<RiwayatPeminjaman>();
+                }
+                else
+                {
+                    riwayatList = new List<RiwayatPeminjaman>();
                 }
 
-                riwayat.Id = list.Count > 0 ? list.Max(r => r.Id) + 1 : 1;
-                list.Add(riwayat);
+                riwayat.Id = riwayatList.Count > 0 ? riwayatList.Max(r => r.Id) + 1 : 1;
 
+                riwayatList.Add(riwayat);
+
+                var options = new JsonSerializerOptions { WriteIndented = true };
                 await System.IO.File.WriteAllTextAsync(
                     _riwayatFilePath,
-                    JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }));
+                    JsonSerializer.Serialize(riwayatList, options));
             }
             catch (Exception ex)
             {
@@ -161,33 +129,7 @@ namespace Tubes_KPL.Services
             }
         }
 
-        private async Task UpdateRiwayatLokal(int vehicleId)
-        {
-            try
-            {
-                if (!System.IO.File.Exists(_riwayatFilePath)) return;
-
-                var json = await System.IO.File.ReadAllTextAsync(_riwayatFilePath);
-                var list = JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json);
-
-                var riwayat = list?.FirstOrDefault(r => r.VehicleId == vehicleId && r.TanggalKembali == null);
-                if (riwayat != null)
-                {
-                    riwayat.TanggalKembali = DateTime.Now;
-                    riwayat.Status = "Dikembalikan";
-
-                    await System.IO.File.WriteAllTextAsync(
-                        _riwayatFilePath,
-                        JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Gagal update riwayat lokal: {ex.Message}");
-            }
-        }
-
-        public async Task TampilkanRiwayat()
+        public async Task TampilkanRiwayatPeminjaman()
         {
             try
             {
@@ -198,27 +140,27 @@ namespace Tubes_KPL.Services
                 }
 
                 var json = await System.IO.File.ReadAllTextAsync(_riwayatFilePath);
-                var list = JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json);
+                var riwayatList = JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json);
 
-                Console.WriteLine("\nRiwayat Peminjaman:");
+                Console.WriteLine("\nRiwayat Peminjaman Kendaraan:");
                 Console.WriteLine("=============================================================================");
                 Console.WriteLine("| ID  | Kendaraan          | Peminjam       | Tanggal Pinjam    | Status     |");
                 Console.WriteLine("=============================================================================");
 
-                foreach (var r in list)
+                foreach (var riwayat in riwayatList)
                 {
-                    Console.WriteLine($"| {r.Id,-3} | {r.Brand + " " + r.Type,-18} | {r.Peminjam,-14} | {r.TanggalPinjam:yyyy-MM-dd HH:mm} | {r.Status,-10} |");
+                    Console.WriteLine($"| {riwayat.Id,-3} | {riwayat.Brand + " " + riwayat.Type,-18} | {riwayat.Peminjam,-14} | {riwayat.TanggalPinjam:yyyy-MM-dd HH:mm} | {riwayat.Status,-10} |");
                 }
 
                 Console.WriteLine("=============================================================================");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Gagal menampilkan riwayat: {ex.Message}");
+                Console.WriteLine($"Gagal memuat riwayat: {ex.Message}");
             }
-        }
 
-            public async Task<bool> KembalikanKendaraan(int id)
+        }
+        public async Task<bool> KembalikanKendaraan(int id)
         {
             try
             {
@@ -271,5 +213,35 @@ namespace Tubes_KPL.Services
                 return false;
             }
         }
+
+        private async Task UpdateRiwayatLokal(int vehicleId)
+        {
+            try
+            {
+                if (!System.IO.File.Exists(_riwayatFilePath))
+                    return;
+
+                var json = await System.IO.File.ReadAllTextAsync(_riwayatFilePath);
+                var riwayatList = JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json);
+
+                var riwayatAktif = riwayatList?
+                    .FirstOrDefault(r => r.VehicleId == vehicleId && r.TanggalKembali == null);
+
+                if (riwayatAktif != null)
+                {
+                    riwayatAktif.TanggalKembali = DateTime.Now;
+                    riwayatAktif.Status = "Dikembalikan";
+
+                    var options = new JsonSerializerOptions { WriteIndented = true };
+                    await System.IO.File.WriteAllTextAsync(
+                        _riwayatFilePath,
+                        JsonSerializer.Serialize(riwayatList, options));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Gagal update riwayat lokal: {ex.Message}");
+            }
+        }
     }
-    }
+}

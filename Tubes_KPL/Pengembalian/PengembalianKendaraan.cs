@@ -26,7 +26,12 @@ namespace Tubes_KPL.Pengembalian
         public async Task TampilkanMenuPengembalian()
         {
             Console.WriteLine("\n=== Fitur Pengembalian Kendaraan ===");
-
+            Console.Write("Masukkan ID Kendaraan yang ingin dikembalikan: ");
+            if (!int.TryParse(Console.ReadLine(), out int vehicleId))
+            {
+                Console.WriteLine("❌ ID kendaraan tidak valid.");
+                return;
+            }
             var kendaraanDipinjam = await CariKendaraanDipinjamAsync();
             if (kendaraanDipinjam == null)
             {
@@ -42,14 +47,16 @@ namespace Tubes_KPL.Pengembalian
 
             Console.Write("\nIngin dikembalikan? (y/n): ");
             if (Console.ReadLine()?.ToLower() == "y")
-            {
-                var success = await ProsesPengembalianAsync(kendaraanDipinjam.VehicleId);
-                Console.WriteLine(success ? "Status: Sudah dikembalikan." : "Pengembalian gagal.");
-            }
-            else
-            {
-                Console.WriteLine("Transaksi dibatalkan.");
-            }
+        {
+            var success = await ProsesPengembalianAsync(kendaraanDipinjam.VehicleId);
+            Console.WriteLine(success ? "Pengembalian berhasil." : "Pengembalian gagal.");
+        }
+        else
+        {
+            Console.WriteLine("Transaksi dibatalkan.");
+        }
+
+
         }
 
         private async Task<RiwayatPeminjaman> CariKendaraanDipinjamAsync()
@@ -63,22 +70,19 @@ namespace Tubes_KPL.Pengembalian
             return riwayatList?.Find(r => r.Status == "Dipinjam");
         }
 
+
+
         private async Task<bool> ProsesPengembalianAsync(int vehicleId)
         {
-            var response = await _httpClient.PutAsync($"{_baseUrl}/api/vehicles/{vehicleId}/return", null);
-            return response.IsSuccessStatusCode;
-        }
-        public async Task<bool> KembalikanKendaraan(int vehicleId)
-        {
             // Update status kendaraan di API
-            var response = await _httpClient.PostAsync($"{_baseUrl}/api/vehicles/{vehicleId}/return", null);
+            var response = await _httpClient.PutAsync($"{_baseUrl}/api/vehicles/{vehicleId}/return", null);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Gagal memperbarui status kendaraan.");
+                Console.WriteLine("Gagal memperbarui status kendaraan di server.");
                 return false;
             }
 
-            // Update riwayat peminjaman
+            // Update riwayat peminjaman di file lokal
             var riwayatList = await GetRiwayatPeminjaman();
             var riwayat = riwayatList.FirstOrDefault(r => r.VehicleId == vehicleId && r.Status == "Dipinjam");
             if (riwayat != null)
@@ -88,22 +92,23 @@ namespace Tubes_KPL.Pengembalian
                 await SimpanRiwayatLokal(riwayatList);
             }
 
-            Console.WriteLine("Kendaraan berhasil dikembalikan.");
+            Console.WriteLine("Pengembalian berhasil.");
             return true;
         }
 
+
         private async Task<List<RiwayatPeminjaman>> GetRiwayatPeminjaman()
         {
-            if (!File.Exists("data/RiwayatPeminjaman.json"))
+            if (!File.Exists("Data/RiwayatPeminjaman.json"))
                 return new List<RiwayatPeminjaman>();
 
-            var json = await File.ReadAllTextAsync("data/RiwayatPeminjaman.json");
+            var json = await File.ReadAllTextAsync("Data/RiwayatPeminjaman.json");
             return JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json) ?? new List<RiwayatPeminjaman>();
         }
 
         private async Task SimpanRiwayatLokal(List<RiwayatPeminjaman> riwayatList)
         {
-            await File.WriteAllTextAsync("data/RiwayatPeminjaman.json", JsonSerializer.Serialize(riwayatList, new JsonSerializerOptions { WriteIndented = true }));
+            await File.WriteAllTextAsync("Data/RiwayatPeminjaman.json", JsonSerializer.Serialize(riwayatList, new JsonSerializerOptions { WriteIndented = true }));
         }
     }
 }

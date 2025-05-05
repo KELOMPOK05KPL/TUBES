@@ -10,8 +10,6 @@
     "Username": "Endihan",
     "Password": "user123",
     "Role": "user"
-<<<<<<< HEAD
-=======
   },
   {
     "Id": 3,
@@ -48,6 +46,11 @@
     "Username": "syahdan",
     "Password": "syahdanpass",
     "Role": "User"
->>>>>>> 11bf3ebd0085c635de843ba5996ec44e6c4bc46f
+  },
+  {
+    "Id": 9,
+    "Username": "tri",
+    "Password": "123",
+    "Role": "User"
   }
 ]
