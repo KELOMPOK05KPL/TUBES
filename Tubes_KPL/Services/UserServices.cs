@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using Test_API_tubes.Models;
 
-namespace Test_API_tubes.Service
+namespace Test_API_tubes.Services
 {
     public class UserService
     {
