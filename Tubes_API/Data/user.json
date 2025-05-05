@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "Id": 1,
     "Username": "ilham",
@@ -10,5 +10,35 @@
     "Username": "Endihan",
     "Password": "user123",
     "Role": "user"
+  },
+  {
+    "Id": 3,
+    "Username": "jaja",
+    "Password": "user",
+    "Role": "User"
+  },
+  {
+    "Id": 4,
+    "Username": "hani",
+    "Password": "user43",
+    "Role": "User"
+  },
+  {
+    "Id": 5,
+    "Username": "muthi",
+    "Password": "1234",
+    "Role": "User"
+  },
+  {
+    "Id": 6,
+    "Username": "ihsan",
+    "Password": "ihsan321",
+    "Role": "User"
+  },
+  {
+    "Id": 7,
+    "Username": "irfan ",
+    "Password": "irfan345",
+    "Role": "User"
   }
 ]
