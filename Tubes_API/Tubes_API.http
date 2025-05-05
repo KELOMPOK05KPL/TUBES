@@ -1,4 +1,4 @@
-@Tubes_API_HostAddress = http://localhost:5176
+@Tubes_API_HostAddress = https://localhost:44376
 
 GET {{Tubes_API_HostAddress}}/weatherforecast/
 Accept: application/json

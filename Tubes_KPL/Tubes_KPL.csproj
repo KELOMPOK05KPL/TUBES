@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Tubes_API\Tubes_API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="rental_config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

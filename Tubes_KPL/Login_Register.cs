@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 public class Login_Register
 {
@@ -16,18 +16,18 @@ public class Login_Register
     }
 
     private State currentState;
-    private List<User> users;
-    private readonly string filePath = "users.json";
+    private readonly HttpClient httpClient;
+    private readonly string apiBaseUrl = "https://localhost:44376/api/User";
     private string currentUsername = "";
 
     public Login_Register()
     {
         currentState = State.Idle;
-        LoadUsersFromFile();
+        httpClient = new HttpClient();
         Console.WriteLine("Sistem dalam keadaan Idle");
     }
 
-    public void Trigger(string action, string username = "", string password = "")
+    public async void Trigger(string action, string username = "", string password = "")
     {
         switch (currentState)
         {
@@ -35,12 +35,12 @@ public class Login_Register
                 if (action.ToLower() == "register")
                 {
                     currentState = State.Registering;
-                    Register(username, password);
+                    await Register(username, password);
                 }
                 else if (action.ToLower() == "login")
                 {
                     currentState = State.LoggingIn;
-                    Login(username, password);
+                    await Login(username, password);
                 }
                 else
                 {
@@ -65,7 +65,7 @@ public class Login_Register
         }
     }
 
-    private void Register(string username, string password)
+    private async Task Register(string username, string password)
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
@@ -74,67 +74,95 @@ public class Login_Register
             return;
         }
 
-        if (users.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)))
-        {
-            Console.WriteLine("Username sudah terdaftar");
-            currentState = State.Failed;
-            return;
-        }
-
-        int newId = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
-
         var newUser = new User
         {
-            Id = newId,
             Username = username,
             Password = password,
             Role = "User"
         };
 
-        users.Add(newUser);
-        SaveUsersToFile();
-
-        Console.WriteLine("Registrasi berhasil!");
-        currentState = State.Idle;
-    }
-
-    private void Login(string username, string password)
-    {
-        var user = users.FirstOrDefault(u =>
-            u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) &&
-            u.Password == password);
-
-        if (user != null)
+        try
         {
-            Console.WriteLine("Login berhasil! Selamat datang " + username);
-            currentUsername = username;
-            currentState = State.Authenticated;
+            var response = await httpClient.PostAsJsonAsync($"{apiBaseUrl}/register", newUser);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Registrasi berhasil!");
+                currentState = State.Idle;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Registrasi gagal: " + error);
+                currentState = State.Failed;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Login gagal. Username atau password salah");
+            Console.WriteLine("Gagal menghubungi API: " + ex.Message);
             currentState = State.Failed;
         }
     }
 
-    private void SaveUsersToFile()
+    private async Task Login(string username, string password)
     {
-        var json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, json);
+        try
+        {
+            var response = await httpClient.GetAsync($"{apiBaseUrl}/login?username={username}&password={password}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Login berhasil! Selamat datang " + username);
+                currentUsername = username;
+                currentState = State.Authenticated;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Login gagal: " + error);
+                currentState = State.Failed;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Gagal menghubungi API: " + ex.Message);
+            currentState = State.Failed;
+        }
     }
 
-    private void LoadUsersFromFile()
+    public async Task<bool> TriggerLoginAsync(string username, string password)
     {
-        if (File.Exists(filePath))
+        if (currentState != State.Idle)
         {
-            var json = File.ReadAllText(filePath);
-            users = JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+            Console.WriteLine("Tidak bisa login sekarang. Sistem sedang dalam keadaan: " + currentState);
+            return false;
         }
-        else
+
+        currentState = State.LoggingIn;
+        try
         {
-            users = new List<User>();
+            var response = await httpClient.GetAsync($"{apiBaseUrl}/login?username={username}&password={password}");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Login berhasil! Selamat datang " + username);
+                currentUsername = username;
+                currentState = State.Authenticated;
+                return true;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Login gagal: " + error);
+                currentState = State.Failed;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Gagal menghubungi API: " + ex.Message);
+            currentState = State.Failed;
+            return false;
         }
     }
+
 
     public void Logout()
     {
@@ -150,12 +178,20 @@ public class Login_Register
         }
     }
 
-    public void ListUsers()
+    public async void ListUsers()
     {
-        Console.WriteLine("Daftar Pengguna:");
-        foreach (var user in users)
+        try
         {
-            Console.WriteLine($"- {user.Username} ({user.Role})");
+            var users = await httpClient.GetFromJsonAsync<List<User>>($"{apiBaseUrl}/all");
+            Console.WriteLine("Daftar Pengguna:");
+            foreach (var user in users)
+            {
+                Console.WriteLine($"- {user.Username} ({user.Role})");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Gagal memuat daftar user dari API: " + ex.Message);
         }
     }
 

@@ -1,0 +1,10 @@
+{
+  "harga_sewa": {
+    "motor": 75000,
+    "mobil": 150000
+  },
+  "durasi": {
+    "min": 1,
+    "max": 14
+  }
+}
