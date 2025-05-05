@@ -11,13 +11,6 @@
     "Type": "Toyota",
     "Brand": "string",
     "Model": "250RR",
-    "State": 1
-  },
-  {
-    "Id": 3,
-    "Type": "Mobil",
-    "Brand": "Toyota",
-    "Model": "Ayla",
-    "State": 1
+    "State": 0
   }
 ]

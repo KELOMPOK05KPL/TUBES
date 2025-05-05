@@ -4,6 +4,7 @@ using System.Text.Json;
 using Test_API_tubes.Models;
 using Tubes_API;
 using Tubes_API.Services;
+using Tubes_API.Models;
 
 namespace Test_API_tubes.Controllers;
 
@@ -34,23 +35,7 @@ public class VehicleController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = vehicle.Id }, vehicle);
     }
 
-    [HttpPost("{id}/rent")]
-    public IActionResult RentVehicle(int id, [FromBody] PeminjamanRequest request)
-    {
-        var result = _service.RentVehicle(id, request.NamaPeminjam);
-
-        if (!result.success)
-        {
-            return BadRequest(result.message);
-        }
-
-        return Ok(new
-        {
-            success = true,
-            message = result.message,
-            vehicleId = id
-        });
-    }
+    
 
     public class PeminjamanRequest
     {
@@ -58,23 +43,7 @@ public class VehicleController : ControllerBase
     }
 
     // Di Tubes_API/Controllers/VehicleController.cs
-    [HttpPost("{id}/return")]
-    public IActionResult ReturnVehicle(int id)
-    {
-        var result = _service.ReturnVehicle(id);
-
-        if (!result.success)
-        {
-            return BadRequest(result.message);
-        }
-
-        return Ok(new
-        {
-            success = true,
-            message = result.message,
-            vehicleId = id
-        });
-    }
+    
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, Vehicle updated)
@@ -90,4 +59,33 @@ public class VehicleController : ControllerBase
         _service.Delete(id);
         return NoContent();
     }
+
+    [HttpPost("{id}/{actionType}")]
+    public IActionResult HandleVehicleAction(int id, string actionType, [FromBody] ActionRequest? request = null)
+    {
+        var actions = new Dictionary<string, Func<int, ActionRequest?, IActionResult>>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "rent", (vid, req) =>
+            {
+                if (req == null || string.IsNullOrWhiteSpace(req.NamaPeminjam))
+                    return BadRequest("Nama peminjam harus diisi.");
+                var result = _service.RentVehicle(vid, req.NamaPeminjam);
+                return result.success ? Ok(result) : BadRequest(result.message);
+            }
+        },
+        { "return", (vid, _) =>
+            {
+                var result = _service.ReturnVehicle(vid);
+                return result.success ? Ok(result) : BadRequest(result.message);
+            }
+        }
+    };
+
+        if (!actions.TryGetValue(actionType, out var handler))
+            return BadRequest("Action tidak dikenal. Gunakan 'rent' atau 'return'.");
+
+        return handler(id, request);
+    }
+
+
 }

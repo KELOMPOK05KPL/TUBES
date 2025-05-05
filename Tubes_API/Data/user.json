@@ -1,1 +1,14 @@
-[{"Id":1,"Username":"admin","Password":"1234","Role":"admin"},{"Id":2,"Username":"Endihan","Password":"user123","Role":"user"},{"Id":3,"Username":"Yuri","Password":"yuri123","Role":"user"}]
+[
+  {
+    "Id": 1,
+    "Username": "admin",
+    "Password": "1234",
+    "Role": "admin"
+  },
+  {
+    "Id": 2,
+    "Username": "Endihan",
+    "Password": "user123",
+    "Role": "user"
+  }
+]
