@@ -14,7 +14,7 @@ namespace Tubes_KPL.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
-        private readonly string _riwayatFilePath = " ../Tubes_API/Data/RiwayatPeminjaman.json";
+        private readonly string _riwayatFilePath = "Data/RiwayatPeminjaman.json";
 
         public PeminjamanService(HttpClient httpClient, string baseUrl)
         {

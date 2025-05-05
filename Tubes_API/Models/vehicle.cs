@@ -5,6 +5,9 @@ namespace Test_API_tubes.Models
         Available,
         Rented
     }
+      //if (vehicle.State != VehicleState.Rented)
+      //vehicle.State = VehicleState.Available;
+
     public class Vehicle
     {
         public int Id { get; set; }

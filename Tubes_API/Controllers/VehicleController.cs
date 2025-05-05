@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Text.Json;
+using System.Net.Http;
+using System.Text;
 using Test_API_tubes.Models;
-using Tubes_API;
 using Tubes_API.Services;
 using Tubes_API.Models;
 
@@ -13,9 +14,14 @@ namespace Test_API_tubes.Controllers;
 public class VehicleController : ControllerBase
 {
     private readonly VehicleService _service;
-    public VehicleController(VehicleService service)
+    private readonly HttpClient _httpClient;
+    private readonly string _baseUrl = "http://localhost:5176";
+    private readonly string _riwayatFilePath = "Data/RiwayatPeminjaman.json";
+
+    public VehicleController(VehicleService service, HttpClient httpClient)
     {
         _service = service;
+        _httpClient = httpClient;
     }
 
     [HttpGet]
@@ -35,22 +41,17 @@ public class VehicleController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = vehicle.Id }, vehicle);
     }
 
-    
-
-    public class PeminjamanRequest
+    [HttpPut("{id}/return")]
+    public IActionResult ReturnVehicle(int id)
     {
-        public string NamaPeminjam { get; set; }
-    }
+        var vehicle = _service.GetById(id);
+        if (vehicle == null || vehicle.State != VehicleState.Rented)
+            return BadRequest("Kendaraan tidak valid atau tidak sedang dipinjam.");
 
-    // Di Tubes_API/Controllers/VehicleController.cs
-    
+        vehicle.State = VehicleState.Available;
+        _service.Update(vehicle);
 
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, Vehicle updated)
-    {
-        if (id != updated.Id) return BadRequest();
-        _service.Update(updated);
-        return NoContent();
+        return Ok();
     }
 
     [HttpDelete("{id}")]
@@ -64,28 +65,26 @@ public class VehicleController : ControllerBase
     public IActionResult HandleVehicleAction(int id, string actionType, [FromBody] ActionRequest? request = null)
     {
         var actions = new Dictionary<string, Func<int, ActionRequest?, IActionResult>>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "rent", (vid, req) =>
-            {
-                if (req == null || string.IsNullOrWhiteSpace(req.NamaPeminjam))
-                    return BadRequest("Nama peminjam harus diisi.");
-                var result = _service.RentVehicle(vid, req.NamaPeminjam);
-                return result.success ? Ok(result) : BadRequest(result.message);
+        {
+            { "rent", (vid, req) =>
+                {
+                    if (req == null || string.IsNullOrWhiteSpace(req.NamaPeminjam))
+                        return BadRequest("Nama peminjam harus diisi.");
+                    var result = _service.RentVehicle(vid, req.NamaPeminjam);
+                    return result.success ? Ok(result) : BadRequest(result.message);
+                }
+            },
+            { "return", (vid, _) =>
+                {
+                    var result = _service.ReturnVehicle(vid);
+                    return result.success ? Ok(result) : BadRequest(result.message);
+                }
             }
-        },
-        { "return", (vid, _) =>
-            {
-                var result = _service.ReturnVehicle(vid);
-                return result.success ? Ok(result) : BadRequest(result.message);
-            }
-        }
-    };
+        };
 
         if (!actions.TryGetValue(actionType, out var handler))
             return BadRequest("Action tidak dikenal. Gunakan 'rent' atau 'return'.");
 
         return handler(id, request);
     }
-
-
 }

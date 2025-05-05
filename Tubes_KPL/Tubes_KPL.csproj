@@ -17,4 +17,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pengembalian\Features\" />
+    <Folder Include="Pengembalian\Models\" />
+  </ItemGroup>
+
 </Project>

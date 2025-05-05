@@ -158,5 +158,15 @@
     "TanggalPinjam": "2025-05-04T03:30:11.2390358+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
+  },
+  {
+    "Id": 12,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "tri",
+    "TanggalPinjam": "2025-05-05T12:37:56.0530703+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
   }
 ]
