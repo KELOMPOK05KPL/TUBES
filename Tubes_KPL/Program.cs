@@ -125,7 +125,7 @@ namespace Tubes_KPL
 
 
                     case "3":
-                        await peminjamanService.TampilkanRiwayatPeminjaman();
+                        await peminjamanService.TampilkanRiwayat();
                         break;
 
                     case "4":
