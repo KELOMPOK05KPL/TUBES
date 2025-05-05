@@ -136,6 +136,36 @@
     "Type": "Motor",
     "Peminjam": "muthi",
     "TanggalPinjam": "2025-05-05T11:37:01.0506292+07:00",
+    "TanggalKembali": "2025-05-05T13:03:57.0686669+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 12,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-05-05T13:04:10.0586228+07:00",
+    "TanggalKembali": "2025-05-05T13:06:43.3097472+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 13,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-05-05T13:07:00.4312213+07:00",
+    "TanggalKembali": "2025-05-05T13:12:04.1983172+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 14,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-05-05T13:12:22.3586575+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
   },

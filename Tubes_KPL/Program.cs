@@ -96,10 +96,14 @@ namespace Tubes_KPL
                         Console.Clear();
                         await kendaraanViewer.TampilkanSemuaKendaraan();
                         break;
+
                     case "2":
                         var penyewaan = new Penyewaan();
                         await penyewaan.TampilkanMenu();
                         break;
+
+                       
+
                         //Console.Write("Masukkan ID Kendaraan yang ingin dipinjam: ");
                         //if (int.TryParse(Console.ReadLine(), out int id))
                         //{
@@ -119,9 +123,12 @@ namespace Tubes_KPL
                         //    }
                         //}
                         break;
+
+
                     case "3":
-                        await peminjamanService.TampilkanRiwayatPeminjaman();
+                        await peminjamanService.TampilkanRiwayat();
                         break;
+
                     case "4":
                         Console.Write("Masukkan ID Kendaraan yang ingin dikembalikan: ");
                         if (int.TryParse(Console.ReadLine(), out int returnId))
@@ -144,9 +151,9 @@ namespace Tubes_KPL
                         exit = true;
                         break;
                 }
-            }
 
-            Console.WriteLine("Terima kasih telah menggunakan aplikasi!");
+                await Task.Delay(1000);
+            }
         }
     }
 }
