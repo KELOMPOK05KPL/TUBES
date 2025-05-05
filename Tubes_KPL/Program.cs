@@ -99,25 +99,7 @@ namespace Tubes_KPL
                         var penyewaan = new Penyewaan();
                         await penyewaan.TampilkanMenu();
                         break;
-                        //Console.Write("Masukkan ID Kendaraan yang ingin dipinjam: ");
-                        //if (int.TryParse(Console.ReadLine(), out int id))
-                        //{
-                        //    await kendaraanViewer.TampilkanDetailKendaraan(id);
-                        //    Console.Write("Masukkan nama Anda: ");
-                        //    var namaPeminjam = Console.ReadLine();
-
-                        //    Console.Write($"Apakah Anda yakin ingin meminjam kendaraan ini? (y/n): ");
-                        //    if (Console.ReadLine().ToLower() == "y")
-                        //    {
-                        //        var success = await peminjamanService.PinjamKendaraan(id, namaPeminjam);
-                        //        if (success)
-                        //        {
-                        //            Console.Clear();
-                        //            Console.WriteLine("Silahkan ambil kendaraan!");
-                        //        }
-                        //    }
-                        //}
-                        break;
+                       
                     case "3":
                         await peminjamanService.TampilkanRiwayatPeminjaman();
                         break;
