@@ -29,7 +29,7 @@ namespace Tubes_KPL.Pengembalian
             Console.Write("Masukkan ID Kendaraan yang ingin dikembalikan: ");
             if (!int.TryParse(Console.ReadLine(), out int vehicleId))
             {
-                Console.WriteLine("❌ ID kendaraan tidak valid.");
+                Console.WriteLine(" ID kendaraan tidak valid.");
                 return;
             }
             var kendaraanDipinjam = await CariKendaraanDipinjamAsync();
@@ -47,19 +47,19 @@ namespace Tubes_KPL.Pengembalian
 
             Console.Write("\nIngin dikembalikan? (y/n): ");
             if (Console.ReadLine()?.ToLower() == "y")
-        {
-            var success = await ProsesPengembalianAsync(kendaraanDipinjam.VehicleId);
-            Console.WriteLine(success ? "Pengembalian berhasil." : "Pengembalian gagal.");
-        }
-        else
-        {
-            Console.WriteLine("Transaksi dibatalkan.");
-        }
+            {
+                var success = await ProsesPengembalianAsync(kendaraanDipinjam.VehicleId);
+                Console.WriteLine(success ? "Pengembalian berhasil." : "Pengembalian gagal.");
+            }
+            else
+            {
+                Console.WriteLine("Transaksi dibatalkan.");
+            }
 
 
         }
 
-        private async Task<RiwayatPeminjaman> CariKendaraanDipinjamAsync()
+        public async Task<RiwayatPeminjaman> CariKendaraanDipinjamAsync()
         {
             if (!File.Exists(_riwayatFilePath))
                 return null;
@@ -70,11 +70,8 @@ namespace Tubes_KPL.Pengembalian
             return riwayatList?.Find(r => r.Status == "Dipinjam");
         }
 
-
-
-        private async Task<bool> ProsesPengembalianAsync(int vehicleId)
+        public async Task<bool> ProsesPengembalianAsync(int vehicleId)
         {
-            // Update status kendaraan di API
             var response = await _httpClient.PutAsync($"{_baseUrl}/api/vehicles/{vehicleId}/return", null);
             if (!response.IsSuccessStatusCode)
             {
@@ -82,7 +79,6 @@ namespace Tubes_KPL.Pengembalian
                 return false;
             }
 
-            // Update riwayat peminjaman di file lokal
             var riwayatList = await GetRiwayatPeminjaman();
             var riwayat = riwayatList.FirstOrDefault(r => r.VehicleId == vehicleId && r.Status == "Dipinjam");
             if (riwayat != null)
@@ -96,8 +92,7 @@ namespace Tubes_KPL.Pengembalian
             return true;
         }
 
-
-        private async Task<List<RiwayatPeminjaman>> GetRiwayatPeminjaman()
+        public async Task<List<RiwayatPeminjaman>> GetRiwayatPeminjaman()
         {
             if (!File.Exists("Data/RiwayatPeminjaman.json"))
                 return new List<RiwayatPeminjaman>();
@@ -105,6 +100,7 @@ namespace Tubes_KPL.Pengembalian
             var json = await File.ReadAllTextAsync("Data/RiwayatPeminjaman.json");
             return JsonSerializer.Deserialize<List<RiwayatPeminjaman>>(json) ?? new List<RiwayatPeminjaman>();
         }
+
 
         private async Task SimpanRiwayatLokal(List<RiwayatPeminjaman> riwayatList)
         {
