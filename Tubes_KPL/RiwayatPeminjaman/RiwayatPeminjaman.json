@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "namaPeminjam": "John Doe",
+        "barangDipinjam": "Laptop",
+        "tanggalPeminjaman": "2025-04-01T10:00:00",
+        "tanggalPengembalian": "2025-04-10T15:00:00"
+    },
+    {
+        "id": 2,
+        "namaPeminjam": "Jane Smith",
+        "barangDipinjam": "Proyektor",
+        "tanggalPeminjaman": "2025-04-05T14:00:00",
+        "tanggalPengembalian": null
+    },
+    {
+        "id": 3,
+        "namaPeminjam": "Ali Rahman",
+        "barangDipinjam": "Kamera DSLR",
+        "tanggalPeminjaman": "2025-04-08T09:30:00",
+        "tanggalPengembalian": "2025-04-15T17:45:00"
+    }
+]
