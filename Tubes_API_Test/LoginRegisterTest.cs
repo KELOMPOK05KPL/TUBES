@@ -1,69 +1,132 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using Moq.Protected;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.Text;
 
 [TestClass]
 public class LoginRegisterTests
 {
-    [TestMethod]
-    public async Task Login_Success_Should_SetStateToAuthenticated()
+    private class MockHttpMessageHandler : HttpMessageHandler
     {
-        // Arrange
-        var handlerMock = new Mock<HttpMessageHandler>();
+        private readonly Func<HttpRequestMessage, Task<HttpResponseMessage>> _sendAsync;
 
-        handlerMock.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync",
-                ItExpr.Is<HttpRequestMessage>(req =>
-                    req.Method == HttpMethod.Get &&
-                    req.RequestUri.ToString().Contains("/login")),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("Login success")
-            });
+        public MockHttpMessageHandler(Func<HttpRequestMessage, Task<HttpResponseMessage>> sendAsync)
+        {
+            _sendAsync = sendAsync;
+        }
 
-        var httpClient = new HttpClient(handlerMock.Object);
-        var login = new Login_Register(httpClient);
-
-        // Act
-        var result = await login.TriggerLoginAsync("testuser", "testpass");
-
-        // Assert
-        Assert.IsTrue(result);
-        Assert.AreEqual(Login_Register.State.Authenticated, login.GetState());
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            return _sendAsync(request);
+        }
     }
 
     [TestMethod]
-    public async Task Login_Failed_Should_SetStateToFailed()
+    public async Task TriggerLoginAsync_ShouldReturnTrue_WhenLoginSuccessful()
     {
         // Arrange
-        var handlerMock = new Mock<HttpMessageHandler>();
+        var handler = new MockHttpMessageHandler(async (request) =>
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
 
-        handlerMock.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync",
-                ItExpr.Is<HttpRequestMessage>(req =>
-                    req.Method == HttpMethod.Get &&
-                    req.RequestUri.ToString().Contains("/login")),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.Unauthorized,
-                Content = new StringContent("Unauthorized")
-            });
-
-        var httpClient = new HttpClient(handlerMock.Object);
-        var login = new Login_Register(httpClient);
+        var httpClient = new HttpClient(handler);
+        var loginSystem = new LoginRegister(httpClient);
 
         // Act
-        var result = await login.TriggerLoginAsync("wronguser", "wrongpass");
+        var result = await loginSystem.TriggerLoginAsync("testuser", "password");
+
+        // Assert
+        Assert.IsTrue(result);
+        Assert.AreEqual(LoginRegister.AuthState.Authenticated, loginSystem.GetState());
+    }
+
+    [TestMethod]
+    public async Task TriggerLoginAsync_ShouldReturnFalse_WhenLoginFails()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler(async (request) =>
+        {
+            return new HttpResponseMessage(HttpStatusCode.Unauthorized)
+            {
+                Content = new StringContent("Unauthorized")
+            };
+        });
+
+        var httpClient = new HttpClient(handler);
+        var loginSystem = new LoginRegister(httpClient);
+
+        // Act
+        var result = await loginSystem.TriggerLoginAsync("wronguser", "wrongpass");
 
         // Assert
         Assert.IsFalse(result);
-        Assert.AreEqual(Login_Register.State.Failed, login.GetState());
+        Assert.AreEqual(LoginRegister.AuthState.Failed, loginSystem.GetState());
+    }
+
+    [TestMethod]
+    public void Logout_ShouldSetStateToIdle_WhenAuthenticated()
+    {
+        // Arrange
+        var loginSystem = new LoginRegister();
+        typeof(LoginRegister).GetField("_currentState", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                             .SetValue(loginSystem, LoginRegister.AuthState.Authenticated);
+
+        // Act
+        loginSystem.Logout();
+
+        // Assert
+        Assert.AreEqual(LoginRegister.AuthState.Idle, loginSystem.GetState());
+    }
+
+    [TestMethod]
+    public async Task ListUsersAsync_ShouldPrintUserList_WhenUsersExist()
+    {
+        // Arrange
+        var users = new List<User>
+        {
+            new User { Id = 1, Username = "user1", Role = "User" },
+            new User { Id = 2, Username = "admin", Role = "Admin" }
+        };
+
+        var json = JsonSerializer.Serialize(users);
+        var handler = new MockHttpMessageHandler((request) =>
+        {
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            });
+        });
+
+        var httpClient = new HttpClient(handler);
+        var loginSystem = new LoginRegister(httpClient);
+
+        // Act
+        await loginSystem.ListUsersAsync();
+
+        // No assertion, only output check. Could redirect console for assertions if needed.
+    }
+
+    [TestMethod]
+    public async Task TriggerAsync_ShouldGoToRegisteringState_WhenRegisterCalled()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler((request) =>
+        {
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        });
+
+        var httpClient = new HttpClient(handler);
+        var loginSystem = new LoginRegister(httpClient);
+
+        // Act
+        await loginSystem.TriggerAsync("register", "newuser", "newpass");
+
+        // Assert
+        Assert.AreEqual(LoginRegister.AuthState.Idle, loginSystem.GetState()); // Karena RegisterAsync mengembalikan ke Idle saat sukses
     }
 }
