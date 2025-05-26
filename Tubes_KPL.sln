@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tubes_API", "Tubes_API\Tube
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tubes_API_Test", "Tubes_API_Test\Tubes_API_Test.csproj", "{B638606E-460E-4E83-B990-4C54827D6FAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUBESGUI", "TUBESGUI\TUBESGUI.csproj", "{F79F824C-CCE1-4067-B7D7-08B9CB77785A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B638606E-460E-4E83-B990-4C54827D6FAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B638606E-460E-4E83-B990-4C54827D6FAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B638606E-460E-4E83-B990-4C54827D6FAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F79F824C-CCE1-4067-B7D7-08B9CB77785A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F79F824C-CCE1-4067-B7D7-08B9CB77785A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F79F824C-CCE1-4067-B7D7-08B9CB77785A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F79F824C-CCE1-4067-B7D7-08B9CB77785A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

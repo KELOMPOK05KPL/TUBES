@@ -1,4 +1,3 @@
-
 using controller;
 using System;
 using System.Net.Http;
@@ -18,7 +17,7 @@ namespace Tubes_KPL
             var kendaraanViewer = new KendaraanViewer(httpClient, baseUrl);
             var peminjamanService = new PeminjamanService(httpClient, baseUrl);
             var vehicleManagement = new VehicleManagementService(httpClient, baseUrl);
-            var loginRegister = new Login_Register();
+            var loginRegister = new LoginRegister();
 
             string loggedInUser = "";
             bool isLoggedIn = false;
@@ -40,7 +39,7 @@ namespace Tubes_KPL
                         var regUser = Console.ReadLine();
                         Console.Write("Masukkan password: ");
                         var regPass = Console.ReadLine();
-                        loginRegister.Trigger("register", regUser, regPass);
+                        loginRegister.TriggerAsync("register", regUser, regPass);
                         break;
 
                     case "2":
