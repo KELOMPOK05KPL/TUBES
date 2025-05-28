@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Forms;
+
 namespace TUBESGUI
 {
     public partial class Login : Form
@@ -15,11 +18,13 @@ namespace TUBESGUI
             string username = textBox1.Text.Trim();
             string password = textBox2.Text.Trim();
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Harap isi username dan password.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            button1.Enabled = false; // Hindari klik ganda
 
             try
             {
@@ -27,10 +32,10 @@ namespace TUBESGUI
 
                 if (success)
                 {
-                    MessageBox.Show("Login berhasil!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Login berhasil! Selamat datang, {password}.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Ganti ke form utama setelah login sukses
-                    Home home = new Home(); // Ganti dengan form utama milikmu
+                    // Pindah ke form utama setelah login berhasil
+                    var home = new Home(); // Pastikan form 'Home' tersedia
                     home.Show();
                     this.Hide();
                 }
@@ -41,41 +46,40 @@ namespace TUBESGUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Terjadi kesalahan saat login: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Terjadi kesalahan saat login:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
+            finally
+            {
+                button1.Enabled = true;
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-            Register registerForm = new Register();
+            var registerForm = new Register(); // Pastikan form 'Register' tersedia
             registerForm.Show();
-            this.Hide(); // Sembunyikan form login
+            this.Hide();
         }
 
         private void Login_Load(object sender, EventArgs e)
         {
-            // Pusatkan panel ke tengah form
-            panel1.Left = (this.ClientSize.Width - panel1.Width) / 2;
-            panel1.Top = (this.ClientSize.Height - panel1.Height) / 2;
-
-            this.Resize += (s, ev) =>
-            {
-                panel1.Left = (this.ClientSize.Width - panel1.Width) / 2;
-                panel1.Top = (this.ClientSize.Height - panel1.Height) / 2;
-            };
+            CenterPanel();
+            this.Resize += (s, ev) => CenterPanel();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void CenterPanel()
+        {
+            if (panel1 != null)
+            {
+                panel1.Left = (ClientSize.Width - panel1.Width) / 2;
+                panel1.Top = (ClientSize.Height - panel1.Height) / 2;
+            }
+        }
+
+        // Event kosong bisa dihapus jika tidak digunakan
+        private void pictureBox1_Click(object sender, EventArgs e) { }
+        private void panel1_Paint(object sender, PaintEventArgs e) { }
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
         }

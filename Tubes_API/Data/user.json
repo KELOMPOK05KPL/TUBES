@@ -46,5 +46,17 @@
     "Username": "syahdan",
     "Password": "syahdanpass",
     "Role": "User"
+  },
+  {
+    "Id": 9,
+    "Username": "rei123",
+    "Password": "rei",
+    "Role": "User"
+  },
+  {
+    "Id": 10,
+    "Username": "user1234",
+    "Password": "ilham",
+    "Role": "User"
   }
 ]
