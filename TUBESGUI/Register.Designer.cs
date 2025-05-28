@@ -134,7 +134,6 @@
         public TextBox textBox2;
         private Button button1;
         private Panel panel1;
-        private CuoreUI.Controls.cuiTextBox cuiTextBox1;
         private PictureBox pictureBox1;
     }
 }
