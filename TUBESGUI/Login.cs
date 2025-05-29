@@ -18,8 +18,8 @@ namespace TUBESGUI
         // Event handler saat tombol login diklik
         private async void button1_Click(object sender, EventArgs e)
         {
-            string username = textBox1.Text.Trim();
-            string password = textBox2.Text.Trim();
+            string username = textBox2.Text.Trim();
+            string password = textBox1.Text.Trim();
 
             // Validasi input kosong
             if (IsInputInvalid(username, password))
@@ -84,7 +84,7 @@ namespace TUBESGUI
             {
                 MessageBox.Show($"Login berhasil! Selamat datang, {username}.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                var homeForm = new Home(); // Form utama user
+                var homeForm = new Home(); 
                 homeForm.Show();
                 Hide();
             }
@@ -97,7 +97,7 @@ namespace TUBESGUI
         // Event saat label "Register" diklik
         private void label1_Click(object sender, EventArgs e)
         {
-            var registerForm = new Register(); // Form registrasi user
+            var registerForm = new Register(); 
             registerForm.Show();
             Hide();
         }
@@ -105,8 +105,8 @@ namespace TUBESGUI
         // Event saat form login dimuat
         private void Login_Load(object sender, EventArgs e)
         {
-            CenterPanel(); // Posisikan panel ke tengah
-            Resize += (s, _) => CenterPanel(); // Responsif saat form diubah ukurannya
+            CenterPanel(); 
+            Resize += (s, _) => CenterPanel(); 
         }
 
         // Fungsi untuk memusatkan panel pada form

@@ -28,8 +28,8 @@ namespace TUBESGUI
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            string username = textBox1.Text.Trim();
-            string password = textBox2.Text.Trim();
+            string username = textBox2.Text.Trim();
+            string password = textBox1.Text.Trim();
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
