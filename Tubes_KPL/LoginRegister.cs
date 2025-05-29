@@ -72,7 +72,7 @@ public class LoginRegister
         }
     }
 
-    private async Task RegisterAsync(string username, string password)
+    public async Task RegisterAsync(string username, string password)
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
@@ -110,14 +110,13 @@ public class LoginRegister
         }
     }
 
-    private async Task LoginAsync(string username, string password)
+    public async Task LoginAsync(string username, string password)
     {
         try
         {
             var response = await _httpClient.GetAsync($"{_apiBaseUrl}/login?username={username}&password={password}");
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Login berhasil! Selamat datang {username}");
                 _currentUsername = username;
                 _currentState = AuthState.Authenticated;
             }
@@ -159,6 +158,55 @@ public class LoginRegister
             {
                 var error = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Login gagal: {error}");
+                _currentState = AuthState.Failed;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Gagal menghubungi API: {ex.Message}");
+            _currentState = AuthState.Failed;
+            return false;
+        }
+    }
+
+    public async Task<bool> TriggerRegisterAsync(string username, string password)
+    {
+        if (_currentState != AuthState.Idle)
+        {
+            Console.WriteLine($"Tidak bisa registrasi sekarang. Sistem sedang dalam keadaan: {_currentState}");
+            return false;
+        }
+
+        _currentState = AuthState.Registering;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            Console.WriteLine("Username dan password tidak boleh kosong");
+            _currentState = AuthState.Failed;
+            return false;
+        }
+
+        var newUser = new User
+        {
+            Username = username,
+            Password = password,
+            Role = "User"
+        };
+
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync($"{_apiBaseUrl}/register", newUser);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Registrasi berhasil!");
+                _currentState = AuthState.Idle;
+                return true;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Registrasi gagal: {error}");
                 _currentState = AuthState.Failed;
                 return false;
             }
