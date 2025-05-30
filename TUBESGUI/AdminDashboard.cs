@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace TUBESGUI
 {
-    public partial class AdminDashboard: Form
+    public partial class AdminDashboard : Form
     {
         public AdminDashboard()
         {
