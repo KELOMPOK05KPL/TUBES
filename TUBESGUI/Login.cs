@@ -70,7 +70,7 @@ namespace TUBESGUI
         {
             MessageBox.Show("Login Admin berhasil!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            var adminForm = new adminForm(); // Form khusus admin, pastikan sudah dibuat
+            var adminForm = new AdminDashboard(); // Form khusus admin, pastikan sudah dibuat
             adminForm.Show();
             Hide(); // Sembunyikan form login
         }
