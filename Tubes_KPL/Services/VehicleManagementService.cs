@@ -21,6 +21,16 @@ namespace Tubes_KPL.Services
             };
         }
 
+        public async Task<List<Vehicle>> TestGetAllAsync()
+        {
+            return await GetAllAsync();
+        }
+
+        public async Task<bool> TestCreateAsync(Vehicle vehicle)
+        {
+            return await CreateAsync(vehicle);
+        }
+
         public async Task HandleVehicleManagement()
         {
             while (true)
