@@ -43,6 +43,7 @@ namespace Tubes_API.Services
             {
                 vehicles[index].Brand = updated.Brand;
                 vehicles[index].Type = updated.Type;
+                vehicles[index].Model = updated.Model;
                 // Tidak mengubah State saat update
                 SaveAll(vehicles);
             }
