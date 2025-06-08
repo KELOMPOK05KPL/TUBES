@@ -1,4 +1,3 @@
-﻿
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -18,6 +17,7 @@ namespace Tubes_KPL.Services
         private readonly string _baseUrl;
         private readonly string _historyFilePath = "Data/RiwayatPeminjaman.json";
 
+        // Dictionary for table-driven action handlers
         private readonly Dictionary<string, Func<int, Task<bool>>> _actionHandlers;
 
         public PeminjamanService(HttpClient httpClient, string baseUrl)
@@ -220,7 +220,7 @@ namespace Tubes_KPL.Services
             }
         }
 
-        // Duplicate return method with detailed output (optional backup)
+       
         public async Task<bool> ReturnVehicleDetailedAsync(int id)
         {
             try
