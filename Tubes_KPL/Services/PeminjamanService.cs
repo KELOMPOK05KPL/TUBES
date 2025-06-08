@@ -17,6 +17,7 @@ namespace Tubes_KPL.Services
         private readonly string _baseUrl;
         private readonly string _historyFilePath = "Data/RiwayatPeminjaman.json";
 
+        // Dictionary for table-driven action handlers
         private readonly Dictionary<string, Func<int, Task<bool>>> _actionHandlers;
 
         public PeminjamanService(HttpClient httpClient, string baseUrl)
