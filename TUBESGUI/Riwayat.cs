@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -26,7 +26,7 @@ namespace TUBESGUI
         {
             try
             {
-                string filePath = "Data/riwayatPeminjaman.json"; // Pastikan path dan nama file benar
+                string filePath = "Data/riwayatPeminjaman.json"; 
                 if (!File.Exists(filePath))
                 {
                     lblStatus.Text = "Status: File riwayat tidak ditemukan.";
@@ -56,7 +56,6 @@ namespace TUBESGUI
         }
     }
 
-    // Model sesuai response/file Anda
     public class RiwayatPeminjaman
     {
         public int Id { get; set; }

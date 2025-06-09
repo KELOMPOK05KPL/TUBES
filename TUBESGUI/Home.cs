@@ -17,6 +17,8 @@ namespace TUBESGUI
             InitializeComponent();
         }
 
+ 
+
         //Page home
         private void BtnHome_Click(object sender, EventArgs e)
         {
@@ -32,7 +34,8 @@ namespace TUBESGUI
         //Page Rent Vehicle
         private void BtnRentVehicle_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Rent Vehicle button clicked");
+            //MessageBox.Show("Rent Vehicle button clicked");
+            //loadform(new SewaKendaraan());
         }
 
         //Page Return Vehicle
@@ -55,6 +58,11 @@ namespace TUBESGUI
             {
                 this.Close(); // atau tampilkan form login
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
