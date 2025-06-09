@@ -17,8 +17,6 @@ namespace TUBESGUI
             InitializeComponent();
         }
 
- 
-
         //Page home
         private void BtnHome_Click(object sender, EventArgs e)
         {
@@ -41,7 +39,7 @@ namespace TUBESGUI
         //Page Return Vehicle
         private void BtnReturnVehicle_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Return Vehicle button clicked");
+            //loadform(new ReturnKendaraan());
         }
 
         //Page History

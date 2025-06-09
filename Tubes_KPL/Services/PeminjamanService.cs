@@ -95,7 +95,7 @@ namespace Tubes_KPL.Services
             return true;
         }
 
-        private async Task<Vehicle> GetVehicleAsync(int id)
+        public async Task<Vehicle> GetVehicleAsync(int id)
         {
             var response = await _httpClient.GetAsync($"{_baseUrl}/api/vehicles/{id}");
             if (!response.IsSuccessStatusCode) return null;

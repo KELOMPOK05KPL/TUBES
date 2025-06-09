@@ -11,13 +11,13 @@
     "Type": "Motor",
     "Brand": "Honda",
     "Model": "250RR",
-    "State": 1
+    "State": 0
   },
   {
     "Id": 3,
     "Type": "motor",
     "Brand": "honda",
     "Model": "beat",
-    "State": 1
+    "State": 0
   }
 ]
