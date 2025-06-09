@@ -184,19 +184,22 @@ namespace TUBESGUI
             }
         }
 
-        // Placeholder event untuk label (jika diperlukan)
+        // Placeholder event untuk label
         private void labelTitle_Click(object sender, EventArgs e)
         {
         }
 
-        // Placeholder event untuk header (jika diperlukan)
+        // Placeholder event untuk header
         private void Header_Paint(object sender, PaintEventArgs e)
         {
         }
 
-        // Placeholder tombol tambahan (jika diperlukan)
+        // Button Logout untuk kembali ke menu login
         private void button1_Click(object sender, EventArgs e)
         {
+            var loginForm = new Login();
+            loginForm.Show();
+            this.Hide();
         }
     }
 }

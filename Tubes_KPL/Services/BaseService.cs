@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 
 namespace Tubes_KPL.Services
 {
+
+    // Kelas abstrak dasar untuk layanan CRUD yang menggunakan HttpClient.
     public abstract class BaseService<T>
     {
         protected readonly HttpClient _httpClient;
         protected readonly string _baseUrl;
         protected readonly string _endpoint;
 
+        // Konstruktor untuk inisialisasi HttpClient dan endpoint.
         protected BaseService(HttpClient httpClient, string baseUrl, string endpoint)
         {
             _httpClient = httpClient;
@@ -21,6 +24,7 @@ namespace Tubes_KPL.Services
             _endpoint = endpoint;
         }
 
+        // Mengambil semua data T dari endpoint.
         protected async Task<List<T>> GetAllAsync()
         {
             try
@@ -36,6 +40,7 @@ namespace Tubes_KPL.Services
             }
         }
 
+        // Mengambil data berdasarkan ID.
         protected async Task<T> GetByIdAsync(int id)
         {
             try
@@ -52,6 +57,7 @@ namespace Tubes_KPL.Services
             }
         }
 
+        // Membuat data baru.
         protected async Task<bool> CreateAsync(T data)
         {
             try
@@ -71,6 +77,7 @@ namespace Tubes_KPL.Services
             }
         }
 
+        // Memperbarui data berdasarkan ID.
         protected async Task<bool> UpdateAsync(int id, T data)
         {
             try
@@ -90,6 +97,7 @@ namespace Tubes_KPL.Services
             }
         }
 
+        // Menghapus data berdasarkan ID.
         protected async Task<bool> DeleteAsync(int id)
         {
             try

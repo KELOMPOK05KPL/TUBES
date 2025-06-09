@@ -9,7 +9,9 @@ namespace Tubes_KPL.Services
 {
     public class VehicleManagementService : BaseService<Vehicle>
     {
+        // Dictionary untuk menyimpan operasi CRUD dengan key string dan value berupa fungsi async
         private Dictionary<string, Func<Vehicle, Task<bool>>> _crudOperations;
+
         public VehicleManagementService(HttpClient httpClient, string baseUrl)
             : base(httpClient, baseUrl, "vehicles")
         {
@@ -21,16 +23,19 @@ namespace Tubes_KPL.Services
             };
         }
 
+        // Fungsi test untuk mengambil semua kendaraan
         public async Task<List<Vehicle>> TestGetAllAsync()
         {
             return await GetAllAsync();
         }
 
+        // Fungsi test untuk menambahkan kendaraan
         public async Task<bool> TestCreateAsync(Vehicle vehicle)
         {
             return await CreateAsync(vehicle);
         }
 
+        // Menampilkan menu interaktif untuk manajemen kendaraan
         public async Task HandleVehicleManagement()
         {
             while (true)
@@ -48,19 +53,19 @@ namespace Tubes_KPL.Services
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        await DisplayAllVehicles();
+                        await DisplayAllVehicles(); // Menampilkan semua kendaraan
                         break;
                     case "2":
-                        await HandleCrudOperation("create");
+                        await HandleCrudOperation("create"); // Tambah kendaraan
                         break;
                     case "3":
-                        await HandleCrudOperation("update");
+                        await HandleCrudOperation("update"); // Edit kendaraan
                         break;
                     case "4":
-                        await HandleCrudOperation("delete");
+                        await HandleCrudOperation("delete"); // Hapus kendaraan
                         break;
                     case "5":
-                        return;
+                        return; // Keluar dari menu
                     default:
                         Console.WriteLine("Pilihan tidak valid!");
                         break;
@@ -71,6 +76,7 @@ namespace Tubes_KPL.Services
             }
         }
 
+        // Menampilkan semua kendaraan yang ada
         private async Task DisplayAllVehicles()
         {
             var vehicles = await GetAllAsync();
@@ -83,6 +89,7 @@ namespace Tubes_KPL.Services
             Console.WriteLine("-----------------------------------------");
         }
 
+        // Menangani operasi CRUD berdasarkan nama operasi (create, update, delete)
         private async Task HandleCrudOperation(string operation)
         {
             if (!_crudOperations.ContainsKey(operation))
@@ -91,14 +98,16 @@ namespace Tubes_KPL.Services
                 return;
             }
 
+            // Operasi create tidak butuh ID
             if (operation == "create")
             {
-                var newVehicle = CreateVehicleForm();
+                var newVehicle = CreateVehicleForm(); // Form input untuk kendaraan baru
                 var success = await _crudOperations[operation](newVehicle);
                 Console.WriteLine(success ? "Berhasil menambahkan!" : "Gagal menambahkan!");
                 return;
             }
 
+            // Untuk update dan delete butuh ID kendaraan
             Console.Write("Masukkan ID Kendaraan: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
             {
@@ -113,15 +122,18 @@ namespace Tubes_KPL.Services
                 return;
             }
 
+            // Kalau update, ambil input baru dari user
             if (operation == "update")
             {
                 vehicle = UpdateVehicleForm(vehicle);
             }
 
+            // Eksekusi operasi
             var result = await _crudOperations[operation](vehicle);
             Console.WriteLine(result ? "Operasi berhasil!" : "Operasi gagal!");
         }
 
+        // Form input untuk kendaraan baru (digunakan saat create)
         private Vehicle CreateVehicleForm()
         {
             Console.WriteLine("\nTambah Kendaraan Baru");
@@ -141,6 +153,7 @@ namespace Tubes_KPL.Services
             return vehicle;
         }
 
+        // Form input untuk mengubah data kendaraan (digunakan saat update)
         private Vehicle UpdateVehicleForm(Vehicle vehicle)
         {
             Console.WriteLine("\nEdit Kendaraan");
