@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -220,6 +220,7 @@ namespace Tubes_KPL.Services
             }
         }
 
+       
         public async Task<bool> ReturnVehicleDetailedAsync(int id)
         {
             try
