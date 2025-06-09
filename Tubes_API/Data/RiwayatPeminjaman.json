@@ -168,5 +168,55 @@
     "TanggalPinjam": "2025-05-05T13:12:22.3586575+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
+  },
+  {
+    "Id": 15,
+    "VehicleId": 3,
+    "Brand": "honda",
+    "Type": "motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-06-04T21:54:15.8592546+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 16,
+    "VehicleId": 3,
+    "Brand": "toyota",
+    "Type": "mobil",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-06-04T22:03:10.8311077+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 17,
+    "VehicleId": 3,
+    "Brand": "honda",
+    "Type": "motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-06-08T17:37:17.8903066+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 18,
+    "VehicleId": 3,
+    "Brand": "honda",
+    "Type": "motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-06-08T22:54:16.1788015+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 19,
+    "VehicleId": 3,
+    "Brand": "honda",
+    "Type": "motor",
+    "Peminjam": "muthi",
+    "TanggalPinjam": "2025-06-08T23:26:01.1064624+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
   }
 ]

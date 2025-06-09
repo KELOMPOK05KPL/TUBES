@@ -16,14 +16,14 @@ namespace controller
         public int TotalHarga { get; set; }
     }
 
-    public class Sistemsewa<T> where T : VehicleDto
+    public class SistemSewa<T> where T : VehicleDto
     {
         private readonly List<T> kendaraanTersedia;
         private readonly RuntimeConfig config;
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
 
-        public Sistemsewa(List<T> kendaraanTersedia, RuntimeConfig config, HttpClient httpClient, string baseUrl)
+        public SistemSewa(List<T> kendaraanTersedia, RuntimeConfig config, HttpClient httpClient, string baseUrl)
         {
             this.kendaraanTersedia = kendaraanTersedia;
             this.config = config;
@@ -117,7 +117,7 @@ namespace controller
             Console.WriteLine($"Total Harga: Rp{total:N0}");
         }
 
-        private async Task<bool> PinjamKendaraan(int id, string namaPeminjam)
+        public async Task<bool> PinjamKendaraan(int id, string namaPeminjam)
         {
             var request = new { NamaPeminjam = namaPeminjam };
             var content = new StringContent(
