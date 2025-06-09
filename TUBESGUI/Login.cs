@@ -6,7 +6,6 @@ namespace TUBESGUI
 {
     public partial class Login : Form
     {
-        // Instance untuk menangani proses login
         private readonly LoginRegister _loginRegister;
 
         public Login()
@@ -15,42 +14,59 @@ namespace TUBESGUI
             _loginRegister = new LoginRegister();
         }
 
-        // Event handler saat tombol login diklik
+        // Saat tombol login ditekan
         private async void button1_Click(object sender, EventArgs e)
         {
             string username = textBox2.Text.Trim();
             string password = textBox1.Text.Trim();
 
-            // Validasi input kosong
             if (IsInputInvalid(username, password))
             {
                 MessageBox.Show("Harap isi username dan password.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            button1.Enabled = false; // Mencegah klik ganda
+            button1.Enabled = false;
 
             try
             {
-                // Pemeriksaan kredensial admin
-                if (IsAdminCredentials(username, password))
-                {
-                    HandleAdminLogin();
-                    return;
-                }
-
-                // Proses login untuk user biasa
-                await HandleUserLoginAsync(username, password);
+                await HandleLoginAsync(username, password);
             }
             catch (Exception ex)
             {
-                // Penanganan error tidak terduga
                 MessageBox.Show($"Terjadi kesalahan saat login:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                button1.Enabled = true; // Aktifkan kembali tombol setelah proses login selesai
+                button1.Enabled = true;
             }
+        }
+
+        // Fungsi login utama (admin/user)
+        private async Task HandleLoginAsync(string username, string password)
+        {
+            var user = await _loginRegister.GetUserByCredentialsAsync(username, password);
+
+            if (user != null)
+            {
+                MessageBox.Show($"Login berhasil! Selamat datang, {user.Username}.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                NavigateToDashboard(user.Role);
+            }
+            else
+            {
+                MessageBox.Show("User belum terdaftar atau password salah!", "Gagal Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Navigasi berdasarkan role
+        private void NavigateToDashboard(string role)
+        {
+            Form nextForm = role.Equals("admin", StringComparison.OrdinalIgnoreCase)
+                ? new AdminDashboard()
+                : new Home();
+
+            nextForm.Show();
+            Hide();
         }
 
         // Validasi input kosong
@@ -59,57 +75,22 @@ namespace TUBESGUI
             return string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password);
         }
 
-        // Pemeriksaan kredensial admin (harcoded — sebaiknya gunakan metode yang lebih aman)
-        private static bool IsAdminCredentials(string username, string password)
-        {
-            return username.Equals("admin", StringComparison.OrdinalIgnoreCase) && password == "admin4321";
-        }
-
-        // Penanganan login khusus admin
-        private void HandleAdminLogin()
-        {
-            MessageBox.Show("Login Admin berhasil!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            var adminForm = new AdminDashboard(); // Form khusus admin, pastikan sudah dibuat
-            adminForm.Show();
-            Hide(); // Sembunyikan form login
-        }
-
-        // Proses login untuk user biasa
-        private async Task HandleUserLoginAsync(string username, string password)
-        {
-            bool success = await _loginRegister.TriggerLoginAsync(username, password);
-
-            if (success)
-            {
-                MessageBox.Show($"Login berhasil! Selamat datang, {username}.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                var homeForm = new Home(); 
-                homeForm.Show();
-                Hide();
-            }
-            else
-            {
-                MessageBox.Show("User belum terdaftar atau password salah!", "Gagal Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Event saat label "Register" diklik
+        // Arahkan ke form register
         private void label1_Click(object sender, EventArgs e)
         {
-            var registerForm = new Register(); 
+            var registerForm = new Register();
             registerForm.Show();
             Hide();
         }
 
-        // Event saat form login dimuat
+        // Pusatkan panel saat form load
         private void Login_Load(object sender, EventArgs e)
         {
-            CenterPanel(); 
-            Resize += (s, _) => CenterPanel(); 
+            CenterPanel();
+            Resize += (s, _) => CenterPanel();
         }
 
-        // Fungsi untuk memusatkan panel pada form
+        // Fungsi memusatkan panel login
         private void CenterPanel()
         {
             if (panel1 != null)
@@ -119,7 +100,7 @@ namespace TUBESGUI
             }
         }
 
-        // Event kosong yang tidak digunakan dapat dihapus
+        // Event tidak digunakan
         private void pictureBox1_Click(object sender, EventArgs e) { }
         private void panel1_Paint(object sender, PaintEventArgs e) { }
         private void textBox2_TextChanged(object sender, EventArgs e) { }

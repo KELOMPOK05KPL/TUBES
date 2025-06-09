@@ -257,13 +257,34 @@ public class LoginRegister
         }
     }
 
+    public async Task<User?> GetUserByCredentialsAsync(string username, string password)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"{_apiBaseUrl}/login?username={username}&password={password}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadFromJsonAsync<User>();
+                return user;
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Gagal mendapatkan user: {ex.Message}");
+            return null;
+        }
+    }
+
     public AuthState GetState() => _currentState;
 }
 
 // Model User
 public class User
 {
-    public int Id { get; set; }
+    public int Id { get; set; } 
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string Role { get; set; } = "User";

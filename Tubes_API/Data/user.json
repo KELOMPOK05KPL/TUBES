@@ -64,5 +64,23 @@
     "Username": "rei",
     "Password": "rei123",
     "Role": "User"
+  },
+  {
+    "Id": 12,
+    "Username": "user",
+    "Password": "user123",
+    "Role": "User"
+  },
+  {
+    "Id": 13,
+    "Username": "irfann",
+    "Password": "user4321",
+    "Role": "User"
+  },
+  {
+    "Id": 14,
+    "Username": "admin",
+    "Password": "adminAjah123",
+    "Role": "admin"
   }
 ]
