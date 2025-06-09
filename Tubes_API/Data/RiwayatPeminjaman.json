@@ -66,8 +66,8 @@
     "Type": "Mobil",
     "Peminjam": "jeki",
     "TanggalPinjam": "2025-05-04T09:22:46.6657967+07:00",
-    "TanggalKembali": null,
-    "Status": "Dipinjam"
+    "TanggalKembali": "2025-06-09T16:28:26.4595525+07:00",
+    "Status": "Dikembalikan"
   },
   {
     "Id": 5,
@@ -166,8 +166,8 @@
     "Type": "Motor",
     "Peminjam": "muthi",
     "TanggalPinjam": "2025-05-05T13:12:22.3586575+07:00",
-    "TanggalKembali": null,
-    "Status": "Dipinjam"
+    "TanggalKembali": "2025-06-09T16:25:00.4796313+07:00",
+    "Status": "Dikembalikan"
   },
   {
     "Id": 15,
@@ -176,8 +176,8 @@
     "Type": "motor",
     "Peminjam": "muthi",
     "TanggalPinjam": "2025-06-04T21:54:15.8592546+07:00",
-    "TanggalKembali": null,
-    "Status": "Dipinjam"
+    "TanggalKembali": "2025-06-09T16:28:35.5524715+07:00",
+    "Status": "Dikembalikan"
   },
   {
     "Id": 16,
@@ -216,6 +216,36 @@
     "Type": "motor",
     "Peminjam": "muthi",
     "TanggalPinjam": "2025-06-08T23:26:01.1064624+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 20,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "triana",
+    "TanggalPinjam": "2025-06-09T16:27:52.4490964+07:00",
+    "TanggalKembali": "2025-06-09T16:28:15.4370657+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 21,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "yuni",
+    "TanggalPinjam": "2025-06-09T16:28:52.7734042+07:00",
+    "TanggalKembali": "2025-06-09T16:29:21.3089506+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 22,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "yuli",
+    "TanggalPinjam": "2025-06-09T16:32:49.8225572+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
   }

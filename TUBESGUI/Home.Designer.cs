@@ -39,6 +39,7 @@
             BtnRentVehicle = new Button();
             BtnAllVehicle = new Button();
             BtnHome = new Button();
+            mainpanel = new Panel();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -198,11 +199,19 @@
             BtnHome.UseVisualStyleBackColor = false;
             BtnHome.Click += BtnHome_Click;
             // 
+            // mainpanel
+            // 
+            mainpanel.Location = new Point(0, 57);
+            mainpanel.Name = "mainpanel";
+            mainpanel.Size = new Size(752, 571);
+            mainpanel.TabIndex = 2;
+            // 
             // Home
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(752, 369);
+            Controls.Add(mainpanel);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Margin = new Padding(2);
@@ -227,5 +236,6 @@
         private Button BtnReturnVehicle;
         private Button BtnHistory;
         private Button BtnLogout;
+        private Panel mainpanel;
     }
 }
