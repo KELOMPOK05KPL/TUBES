@@ -124,14 +124,14 @@ namespace Tubes_KPL
 
 
                     case "3":
-                        await peminjamanService.TampilkanRiwayat();
+                        await peminjamanService.DisplayHistoryAsync();
                         break;
 
                     case "4":
                         Console.Write("Masukkan ID Kendaraan yang ingin dikembalikan: ");
                         if (int.TryParse(Console.ReadLine(), out int returnId))
                         {
-                            var success = await peminjamanService.KembalikanKendaraan(returnId);
+                            var success = await peminjamanService.ReturnVehicleDetailedAsync(returnId);
                             if (success)
                             {
                                 Console.WriteLine("Kendaraan telah dikembalikan!");
