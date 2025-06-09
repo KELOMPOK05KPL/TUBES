@@ -25,6 +25,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Riwayat.cs" />
   </ItemGroup>
 
   <ItemGroup>

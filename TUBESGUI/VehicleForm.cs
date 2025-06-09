@@ -102,5 +102,10 @@ namespace TUBESGUI
             this.DialogResult = DialogResult.Cancel;
             this.Close(); // Tutup form
         }
+
+        private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
