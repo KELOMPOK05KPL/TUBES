@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Tubes_KPL.Services;
 using Tubes_API.Models;
 using Test_API_tubes.Models;
+using TUBESGUI.factory;
 
 namespace TUBESGUI
 {
@@ -43,8 +44,10 @@ namespace TUBESGUI
                 // Cek apakah kendaraan valid untuk dikembalikan
                 if (!ValidateVehicleForReturn(vehicle)) return;
 
-                // Lakukan proses pengembalian
-                await ProcessReturn(vehicleId);
+                var strategy = ReturnStrategyFactory.Create(vehicle);
+                var message = await strategy.HandleReturnAsync(vehicleId, _peminjamanService);
+
+                DisplayStatus(message);
             }
             catch (HttpRequestException)
             {

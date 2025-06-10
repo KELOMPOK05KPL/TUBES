@@ -246,8 +246,8 @@
     "Type": "Mobil",
     "Peminjam": "yuli",
     "TanggalPinjam": "2025-06-09T16:32:49.8225572+07:00",
-    "TanggalKembali": null,
-    "Status": "Dipinjam"
+    "TanggalKembali": "2025-06-10T15:59:20.9347908+07:00",
+    "Status": "Dikembalikan"
   },
   {
     "Id": 23,
@@ -256,6 +256,46 @@
     "Type": "Mobil",
     "Peminjam": "Sassan",
     "TanggalPinjam": "2025-06-10T14:05:01.0626733+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 24,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "anna",
+    "TanggalPinjam": "2025-06-10T16:01:52.4160072+07:00",
+    "TanggalKembali": "2025-06-10T16:02:01.009044+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 25,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "tina",
+    "TanggalPinjam": "2025-06-10T17:38:04.9752519+07:00",
+    "TanggalKembali": "2025-06-10T17:38:15.9912803+07:00",
+    "Status": "Dikembalikan"
+  },
+  {
+    "Id": 26,
+    "VehicleId": 1,
+    "Brand": "Toyota",
+    "Type": "Mobil",
+    "Peminjam": "tina",
+    "TanggalPinjam": "2025-06-10T17:38:42.0459848+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 27,
+    "VehicleId": 2,
+    "Brand": "Honda",
+    "Type": "Motor",
+    "Peminjam": "nana",
+    "TanggalPinjam": "2025-06-10T17:39:00.2858265+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
   }
