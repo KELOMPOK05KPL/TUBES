@@ -17,20 +17,6 @@ namespace TUBESGUI
             InitializeComponent();
         }
 
-        public void loadform(object Form)
-        {
-            if(this.mainpanel.Controls.Count > 0)
-            {
-                this.mainpanel.Controls.RemoveAt(0);
-            }
-            Form f = Form as Form;
-            f.TopLevel = false;
-            f.Dock = DockStyle.Fill;
-            this.mainpanel.Controls.Add(f);
-            this.mainpanel.Tag = f;
-            // Show the new form
-            f.Show();
-        }
         //Page home
         private void BtnHome_Click(object sender, EventArgs e)
         {
@@ -47,13 +33,13 @@ namespace TUBESGUI
         private void BtnRentVehicle_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Rent Vehicle button clicked");
-            loadform(new SewaKendaraan());
+            //loadform(new SewaKendaraan());
         }
 
         //Page Return Vehicle
         private void BtnReturnVehicle_Click(object sender, EventArgs e)
         {
-            loadform(new ReturnKendaraan());
+            //loadform(new ReturnKendaraan());
         }
 
         //Page History
