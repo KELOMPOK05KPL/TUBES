@@ -201,5 +201,31 @@ namespace TUBESGUI
             loginForm.Show();
             this.Hide();
         }
+
+        // SearchBar pencarian kendaraan berdasarkan ID
+        private void SearchBar_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = SearchBar.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                RefreshGrid();
+                return;
+            }
+
+            if (int.TryParse(searchText, out int searchId))
+            {
+                var filteredList = vehicleList.Where(v => v.Id == searchId).ToList();
+
+                VehicleData.DataSource = null;
+                VehicleData.DataSource = filteredList;
+            }
+
+            else
+            {
+                VehicleData.DataSource = null;
+                VehicleData.DataSource = new List<Vehicle>();
+            }
+        }
     }
 }
