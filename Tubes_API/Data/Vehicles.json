@@ -19,5 +19,40 @@
     "Brand": "honda",
     "Model": "beat",
     "State": 0
+  },
+  {
+    "Id": 4,
+    "Type": "Motor",
+    "Brand": "Kawasaki",
+    "Model": "Ninja 1000RR",
+    "State": 0
+  },
+  {
+    "Id": 5,
+    "Type": "Mobil",
+    "Brand": "BMW",
+    "Model": "P90",
+    "State": 1
+  },
+  {
+    "Id": 6,
+    "Type": "Truk",
+    "Brand": "Hino Dutro",
+    "Model": "115 SD",
+    "State": 0
+  },
+  {
+    "Id": 7,
+    "Type": "Bus",
+    "Brand": "Primajasa",
+    "Model": "AC",
+    "State": 0
+  },
+  {
+    "Id": 8,
+    "Type": "Mobil",
+    "Brand": "Mitsubishi",
+    "Model": "E78",
+    "State": 0
   }
 ]

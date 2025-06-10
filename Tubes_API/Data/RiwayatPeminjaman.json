@@ -248,5 +248,15 @@
     "TanggalPinjam": "2025-06-09T16:32:49.8225572+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
+  },
+  {
+    "Id": 23,
+    "VehicleId": 5,
+    "Brand": "BMW",
+    "Type": "Mobil",
+    "Peminjam": "Sassan",
+    "TanggalPinjam": "2025-06-10T14:05:01.0626733+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
   }
 ]
