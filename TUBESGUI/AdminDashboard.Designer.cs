@@ -34,9 +34,20 @@
             Btn_Create = new Button();
             VehicleData = new DataGridView();
             panel1 = new Panel();
+            panel2 = new Panel();
+            SearchBar = new TextBox();
+            lblSearch = new Label();
+            panelBtn = new Panel();
+            panelCreate = new Panel();
+            panelLogout = new Panel();
+            panel5 = new Panel();
             Header.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)VehicleData).BeginInit();
-            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            panelBtn.SuspendLayout();
+            panelCreate.SuspendLayout();
+            panelLogout.SuspendLayout();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // Header
@@ -64,14 +75,14 @@
             // 
             // button1
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button1.BackColor = Color.Red;
+            button1.Dock = DockStyle.Fill;
             button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Century Gothic", 9F, FontStyle.Bold);
             button1.ForeColor = SystemColors.ButtonHighlight;
-            button1.Location = new Point(615, 9);
+            button1.Location = new Point(10, 10);
             button1.Name = "button1";
-            button1.Size = new Size(97, 42);
+            button1.Size = new Size(97, 37);
             button1.TabIndex = 2;
             button1.Text = "Logout";
             button1.UseVisualStyleBackColor = false;
@@ -79,15 +90,15 @@
             // 
             // Btn_Create
             // 
-            Btn_Create.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             Btn_Create.BackColor = Color.DarkGreen;
+            Btn_Create.Dock = DockStyle.Fill;
             Btn_Create.FlatStyle = FlatStyle.Flat;
             Btn_Create.Font = new Font("Century Gothic", 9F, FontStyle.Bold);
             Btn_Create.ForeColor = SystemColors.ButtonHighlight;
             Btn_Create.ImageAlign = ContentAlignment.TopRight;
-            Btn_Create.Location = new Point(733, 9);
+            Btn_Create.Location = new Point(10, 10);
             Btn_Create.Name = "Btn_Create";
-            Btn_Create.Size = new Size(97, 42);
+            Btn_Create.Size = new Size(120, 37);
             Btn_Create.TabIndex = 1;
             Btn_Create.Text = "+ Create";
             Btn_Create.UseVisualStyleBackColor = false;
@@ -101,32 +112,101 @@
             VehicleData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             VehicleData.Dock = DockStyle.Fill;
             VehicleData.GridColor = SystemColors.InfoText;
-            VehicleData.Location = new Point(0, 57);
+            VehicleData.Location = new Point(0, 0);
             VehicleData.Name = "VehicleData";
             VehicleData.ReadOnly = true;
             VehicleData.RowHeadersWidth = 51;
-            VehicleData.Size = new Size(842, 390);
+            VehicleData.Size = new Size(842, 333);
             VehicleData.TabIndex = 1;
             VehicleData.CellContentClick += VehicleData_CellContentClick;
             // 
             // panel1
             // 
             panel1.AutoSize = true;
-            panel1.Controls.Add(button1);
-            panel1.Controls.Add(Btn_Create);
-            panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 393);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 57);
             panel1.Name = "panel1";
-            panel1.Size = new Size(842, 54);
+            panel1.Size = new Size(842, 0);
             panel1.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(SearchBar);
+            panel2.Controls.Add(lblSearch);
+            panel2.Controls.Add(panelBtn);
+            panel2.Dock = DockStyle.Top;
+            panel2.Location = new Point(0, 57);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(842, 57);
+            panel2.TabIndex = 3;
+            // 
+            // SearchBar
+            // 
+            SearchBar.Location = new Point(96, 15);
+            SearchBar.Name = "SearchBar";
+            SearchBar.Size = new Size(379, 27);
+            SearchBar.TabIndex = 2;
+            SearchBar.TextChanged += SearchBar_TextChanged;
+            // 
+            // lblSearch
+            // 
+            lblSearch.AutoSize = true;
+            lblSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblSearch.ForeColor = Color.FromArgb(35, 59, 110);
+            lblSearch.Location = new Point(21, 18);
+            lblSearch.Name = "lblSearch";
+            lblSearch.Size = new Size(59, 20);
+            lblSearch.TabIndex = 1;
+            lblSearch.Text = "Search:";
+            // 
+            // panelBtn
+            // 
+            panelBtn.AutoSize = true;
+            panelBtn.Controls.Add(panelCreate);
+            panelBtn.Controls.Add(panelLogout);
+            panelBtn.Dock = DockStyle.Right;
+            panelBtn.Location = new Point(585, 0);
+            panelBtn.Name = "panelBtn";
+            panelBtn.Size = new Size(257, 57);
+            panelBtn.TabIndex = 0;
+            // 
+            // panelCreate
+            // 
+            panelCreate.Controls.Add(Btn_Create);
+            panelCreate.Dock = DockStyle.Right;
+            panelCreate.Location = new Point(117, 0);
+            panelCreate.Name = "panelCreate";
+            panelCreate.Padding = new Padding(10);
+            panelCreate.Size = new Size(140, 57);
+            panelCreate.TabIndex = 2;
+            // 
+            // panelLogout
+            // 
+            panelLogout.Controls.Add(button1);
+            panelLogout.Dock = DockStyle.Left;
+            panelLogout.Location = new Point(0, 0);
+            panelLogout.Name = "panelLogout";
+            panelLogout.Padding = new Padding(10);
+            panelLogout.Size = new Size(117, 57);
+            panelLogout.TabIndex = 1;
+            // 
+            // panel5
+            // 
+            panel5.Controls.Add(VehicleData);
+            panel5.Dock = DockStyle.Fill;
+            panel5.Location = new Point(0, 114);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(842, 333);
+            panel5.TabIndex = 4;
             // 
             // AdminDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(842, 447);
+            Controls.Add(panel5);
+            Controls.Add(panel2);
             Controls.Add(panel1);
-            Controls.Add(VehicleData);
             Controls.Add(Header);
             Margin = new Padding(2);
             Name = "AdminDashboard";
@@ -136,7 +216,12 @@
             Header.ResumeLayout(false);
             Header.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)VehicleData).EndInit();
-            panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            panelBtn.ResumeLayout(false);
+            panelCreate.ResumeLayout(false);
+            panelLogout.ResumeLayout(false);
+            panel5.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -149,5 +234,12 @@
         private Button Btn_Create;
         private Button button1;
         private Panel panel1;
+        private Panel panel2;
+        private Panel panelBtn;
+        private Panel panelLogout;
+        private Panel panel5;
+        private Panel panelCreate;
+        private TextBox SearchBar;
+        private Label lblSearch;
     }
 }
