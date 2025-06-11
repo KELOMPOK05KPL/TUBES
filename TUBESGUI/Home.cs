@@ -12,40 +12,63 @@ namespace TUBESGUI
 {
     public partial class Home : Form
     {
+        private Form? _activeForm;
+
+        private void LoadForm(Form childForm)
+        {
+            if (_activeForm != null)
+            {
+                _activeForm.Close();
+            }
+
+            _activeForm = childForm; 
+            childForm.TopLevel = false; 
+            childForm.FormBorderStyle = FormBorderStyle.None; 
+            childForm.Dock = DockStyle.Fill; 
+
+            mainpanel.Controls.Clear(); 
+            mainpanel.Controls.Add(childForm); 
+            mainpanel.Tag = childForm; 
+
+            childForm.BringToFront(); 
+            childForm.Show(); 
+        }
+
         public Home()
         {
             InitializeComponent();
+            LoadForm(new WelcomingForm());
         }
 
         //Page home
         private void BtnHome_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Home button clicked");
+            LoadForm(new WelcomingForm());
         }
 
         //Page All Vehicle
         private void BtnAllVehicle_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("All Vehicle button clicked");
+            LoadForm(new LihatSemuaKendaraan());
         }
 
         //Page Rent Vehicle
         private void BtnRentVehicle_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Rent Vehicle button clicked");
-            //loadform(new SewaKendaraan());
+            LoadForm(new SewaKendaraan());
         }
 
         //Page Return Vehicle
         private void BtnReturnVehicle_Click(object sender, EventArgs e)
         {
-            //loadform(new ReturnKendaraan());
+            LoadForm(new ReturnKendaraan());
         }
 
         //Page History
         private void BtnHistory_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("History button clicked");
+            LoadForm(new Riwayat());
         }
 
         //Logout button
@@ -54,7 +77,11 @@ namespace TUBESGUI
             DialogResult result = MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                this.Close(); // atau tampilkan form login
+                this.Hide();
+
+                Login loginForm = new Login();
+                loginForm.Show();
+
             }
         }
 

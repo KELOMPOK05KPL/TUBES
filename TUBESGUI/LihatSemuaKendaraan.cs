@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Test_API_tubes.Models;
@@ -10,71 +10,56 @@ namespace TUBESGUI
 {
     public partial class LihatSemuaKendaraan : Form
     {
-        private readonly string apiUrl = "http://localhost:5176/api/vehicles";
-        private HttpClient client = new HttpClient();
+        private const string ApiUrl = "http://localhost:5176/api/vehicles";
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public LihatSemuaKendaraan()
         {
             InitializeComponent();
-            SetupDataGridView();
+            ConfigureDataGridView();
             LoadVehicles();
         }
 
-        private void SetupDataGridView()
+        // Konfigurasi DataGridView
+        private void ConfigureDataGridView()
         {
-            // Configure DataGridView appearance
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.MultiSelect = false;
-            dataGridView1.ReadOnly = true;
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.RowHeadersVisible = false;
-
-            // Add columns
-            dataGridView1.Columns.Add("Id", "ID");
-            dataGridView1.Columns.Add("Type", "Type");
-            dataGridView1.Columns.Add("Brand", "Brand");
-            dataGridView1.Columns.Add("Model", "Model");
-            dataGridView1.Columns.Add("Status", "Status");
+            // Properti DataGridView
+            vehiclesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            vehiclesDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            vehiclesDataGridView.MultiSelect = false;
+            vehiclesDataGridView.ReadOnly = true;
+            vehiclesDataGridView.AllowUserToAddRows = false;
+            vehiclesDataGridView.RowHeadersVisible = false;
 
             // Style header
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Century Gothic", 9, FontStyle.Bold);
-            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridView1.ColumnHeadersHeight = 35;
+            vehiclesDataGridView.ColumnHeadersDefaultCellStyle.Font =
+                new Font("Century Gothic", 9, FontStyle.Bold);
+            vehiclesDataGridView.ColumnHeadersDefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            vehiclesDataGridView.ColumnHeadersHeightSizeMode =
+                DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            vehiclesDataGridView.ColumnHeadersHeight = 35;
+
+            // Menambahkan kolom
+            vehiclesDataGridView.Columns.Add("Id", "ID");
+            vehiclesDataGridView.Columns.Add("Type", "Type");
+            vehiclesDataGridView.Columns.Add("Brand", "Brand");
+            vehiclesDataGridView.Columns.Add("Model", "Model");
+            vehiclesDataGridView.Columns.Add("Status", "Status");
         }
 
+        // Menampilkan data kendaraan
         private async void LoadVehicles()
         {
             try
             {
                 loadingPanel.Visible = true;
-
-                var response = await client.GetAsync(apiUrl);
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                var vehicles = JsonConvert.DeserializeObject<List<Vehicle>>(content);
-
-                // Clear existing data
-                dataGridView1.Rows.Clear();
-
-                // Add data to DataGridView
-                foreach (var vehicle in vehicles)
-                {
-                    dataGridView1.Rows.Add(
-                        vehicle.Id,
-                        vehicle.Type,
-                        vehicle.Brand,
-                        vehicle.Model,
-                        vehicle.State
-                    );
-                }
+                var vehicles = await FetchVehicles();
+                InsertDataGridView(vehicles);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading vehicles: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowErrorMessage($"Error loading vehicles: {ex.Message}");
             }
             finally
             {
@@ -82,14 +67,44 @@ namespace TUBESGUI
             }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        // Mengambil data kendaraan dari API
+        private async Task<List<Vehicle>> FetchVehicles()
         {
-            LoadVehicles();
+            var response = await _httpClient.GetAsync(ApiUrl);
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<Vehicle>>(content);
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        // Mengisi DataGridView dengan data kendaraan
+        private void InsertDataGridView(List<Vehicle> vehicles)
         {
-            this.Close();
+            vehiclesDataGridView.Rows.Clear();
+
+            foreach (var vehicle in vehicles)
+            {
+                vehiclesDataGridView.Rows.Add(
+                    vehicle.Id,
+                    vehicle.Type,
+                    vehicle.Brand,
+                    vehicle.Model,
+                    vehicle.State
+                );
+            }
+        }
+
+        // Menampilkan pesan error
+        private void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        // Refresh daftar kendaraan
+        private void OnRefreshButtonClick(object sender, EventArgs e)
+        {
+            LoadVehicles();
         }
     }
 }

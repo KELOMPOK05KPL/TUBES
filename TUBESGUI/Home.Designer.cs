@@ -191,10 +191,11 @@
             // 
             // mainpanel
             // 
-            mainpanel.Location = new Point(0, 95);
+            mainpanel.Dock = DockStyle.Fill;
+            mainpanel.Location = new Point(0, 100);
             mainpanel.Margin = new Padding(4, 5, 4, 5);
             mainpanel.Name = "mainpanel";
-            mainpanel.Size = new Size(1074, 952);
+            mainpanel.Size = new Size(1074, 515);
             mainpanel.TabIndex = 2;
             // 
             // Home
