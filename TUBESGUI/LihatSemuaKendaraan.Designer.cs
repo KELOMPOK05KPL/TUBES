@@ -17,102 +17,89 @@
 
         private void InitializeComponent()
         {
-            dataGridView1 = new DataGridView();
-            panel1 = new Panel();
-            label1 = new Label();
-            panel2 = new Panel();
-            btnRefresh = new Button();
-            btnClose = new Button();
+            vehiclesDataGridView = new DataGridView();
+            headerPanel = new Panel();
+            titleLabel = new Label();
+            footerPanel = new Panel();
+            refreshButton = new Button();
+            closeButton = new Button();
             loadingPanel = new Panel();
             loadingLabel = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            panel1.SuspendLayout();
-            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)vehiclesDataGridView).BeginInit();
+            headerPanel.SuspendLayout();
+            footerPanel.SuspendLayout();
             loadingPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // dataGridView1
+            // vehiclesDataGridView
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.BackgroundColor = Color.White;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 71);
-            dataGridView1.Margin = new Padding(3, 4, 3, 4);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.RowTemplate.Height = 28;
-            dataGridView1.Size = new Size(889, 429);
-            dataGridView1.TabIndex = 0;
+            vehiclesDataGridView.AllowUserToAddRows = false;
+            vehiclesDataGridView.AllowUserToDeleteRows = false;
+            vehiclesDataGridView.BackgroundColor = Color.White;
+            vehiclesDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            vehiclesDataGridView.Dock = DockStyle.Fill;
+            vehiclesDataGridView.Location = new Point(0, 71);
+            vehiclesDataGridView.Margin = new Padding(3, 4, 3, 4);
+            vehiclesDataGridView.Name = "vehiclesDataGridView";
+            vehiclesDataGridView.ReadOnly = true;
+            vehiclesDataGridView.RowHeadersWidth = 62;
+            vehiclesDataGridView.RowTemplate.Height = 28;
+            vehiclesDataGridView.Size = new Size(1074, 429);
+            vehiclesDataGridView.TabIndex = 0;
             // 
-            // panel1
+            // headerPanel
             // 
-            panel1.BackColor = Color.FromArgb(35, 59, 110);
-            panel1.Controls.Add(label1);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(3, 4, 3, 4);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(889, 71);
-            panel1.TabIndex = 1;
+            //headerPanel.BackColor = Color.FromArgb(35, 59, 110);
+            headerPanel.Controls.Add(titleLabel);
+            headerPanel.Dock = DockStyle.Top;
+            headerPanel.Location = new Point(0, 0);
+            headerPanel.Margin = new Padding(3, 4, 3, 4);
+            headerPanel.Name = "headerPanel";
+            headerPanel.Size = new Size(1074, 71);
+            headerPanel.TabIndex = 1;
             // 
-            // label1
+            // titleLabel
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.White;
-            label1.Location = new Point(13, 22);
-            label1.Name = "label1";
-            label1.Size = new Size(142, 28);
-            label1.TabIndex = 0;
-            label1.Text = "Vehicle List";
+            titleLabel.AutoSize = true;
+            titleLabel.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            titleLabel.ForeColor = Color.White;
+            titleLabel.ForeColor = Color.FromArgb(35, 59, 110);
+            titleLabel.Location = new Point(13, 22);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(142, 28);
+            titleLabel.TabIndex = 0;
+            titleLabel.Text = "Vehicle List";
             // 
-            // panel2
+            // footerPanel
             // 
-            panel2.BackColor = Color.WhiteSmoke;
-            panel2.Controls.Add(btnRefresh);
-            panel2.Controls.Add(btnClose);
-            panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(0, 500);
-            panel2.Margin = new Padding(3, 4, 3, 4);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(889, 62);
-            panel2.TabIndex = 2;
+            footerPanel.BackColor = Color.WhiteSmoke;
+            footerPanel.Controls.Add(refreshButton);
+            footerPanel.Controls.Add(closeButton);
+            footerPanel.Dock = DockStyle.Bottom;
+            footerPanel.Location = new Point(0, 500);
+            footerPanel.Margin = new Padding(3, 4, 3, 4);
+            footerPanel.Name = "footerPanel";
+            footerPanel.Size = new Size(1074, 62);
+            footerPanel.TabIndex = 2;
             // 
-            // btnRefresh
+            // refreshButton
             // 
-            btnRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnRefresh.BackColor = Color.FromArgb(35, 59, 110);
-            btnRefresh.FlatAppearance.BorderSize = 0;
-            btnRefresh.FlatStyle = FlatStyle.Flat;
-            btnRefresh.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnRefresh.ForeColor = Color.White;
-            btnRefresh.Location = new Point(633, 8);
-            btnRefresh.Margin = new Padding(3, 4, 3, 4);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(111, 44);
-            btnRefresh.TabIndex = 1;
-            btnRefresh.Text = "Refresh";
-            btnRefresh.UseVisualStyleBackColor = false;
-            btnRefresh.Click += btnRefresh_Click;
-            // 
-            // btnClose
-            // 
-            btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnClose.BackColor = Color.FromArgb(192, 0, 0);
-            btnClose.FlatAppearance.BorderSize = 0;
-            btnClose.FlatStyle = FlatStyle.Flat;
-            btnClose.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(764, 8);
-            btnClose.Margin = new Padding(3, 4, 3, 4);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new Size(111, 44);
-            btnClose.TabIndex = 0;
-            btnClose.Text = "Close";
-            btnClose.UseVisualStyleBackColor = false;
+            refreshButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            refreshButton.BackColor = Color.FromArgb(35, 59, 110);
+            refreshButton.FlatAppearance.BorderSize = 0;
+            refreshButton.FlatStyle = FlatStyle.Flat;
+            refreshButton.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            refreshButton.ForeColor = Color.White;
+            //refreshButton.Location = new Point(818, 8);
+            refreshButton.Location = new Point(949, 8);
+            refreshButton.Margin = new Padding(3, 4, 3, 4);
+            refreshButton.Name = "refreshButton";
+            refreshButton.Size = new Size(111, 44);
+            refreshButton.TabIndex = 1;
+            refreshButton.Text = "Refresh";
+            refreshButton.UseVisualStyleBackColor = false;
+            refreshButton.Click += OnRefreshButtonClick;
+          
             // 
             // loadingPanel
             // 
@@ -122,7 +109,7 @@
             loadingPanel.Location = new Point(0, 71);
             loadingPanel.Margin = new Padding(3, 4, 3, 4);
             loadingPanel.Name = "loadingPanel";
-            loadingPanel.Size = new Size(889, 429);
+            loadingPanel.Size = new Size(1074, 429);
             loadingPanel.TabIndex = 3;
             loadingPanel.Visible = false;
             // 
@@ -133,7 +120,7 @@
             loadingLabel.ForeColor = Color.White;
             loadingLabel.Location = new Point(0, 0);
             loadingLabel.Name = "loadingLabel";
-            loadingLabel.Size = new Size(889, 429);
+            loadingLabel.Size = new Size(1074, 429);
             loadingLabel.TabIndex = 0;
             loadingLabel.Text = "Loading vehicle data...";
             loadingLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -142,33 +129,32 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(889, 562);
+            ClientSize = new Size(1074, 562);
             Controls.Add(loadingPanel);
-            Controls.Add(dataGridView1);
-            Controls.Add(panel1);
-            Controls.Add(panel2);
+            Controls.Add(vehiclesDataGridView);
+            Controls.Add(headerPanel);
+            Controls.Add(footerPanel);
             Margin = new Padding(3, 4, 3, 4);
             Name = "LihatSemuaKendaraan";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Vehicle List";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)vehiclesDataGridView).EndInit();
+            headerPanel.ResumeLayout(false);
+            headerPanel.PerformLayout();
+            footerPanel.ResumeLayout(false);
             loadingPanel.ResumeLayout(false);
             ResumeLayout(false);
-
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Panel loadingPanel;
-        private System.Windows.Forms.Label loadingLabel;
+        private DataGridView vehiclesDataGridView;
+        private Panel headerPanel;
+        private Label titleLabel;
+        private Panel footerPanel;
+        private Button closeButton;
+        private Button refreshButton;
+        private Panel loadingPanel;
+        private Label loadingLabel;
     }
 }
