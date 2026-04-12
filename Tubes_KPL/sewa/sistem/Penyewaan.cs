@@ -54,7 +54,7 @@ namespace controller
                 return;
             }
 
-            await _kendaraanViewer.TampilkanDetailKendaraan(id);
+            //await _kendaraanViewer.TampilkanDetailKendaraan(id);
 
             Console.Write("Masukkan nama Anda: ");
             var namaPeminjam = Console.ReadLine();

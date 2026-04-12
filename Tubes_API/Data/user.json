@@ -82,5 +82,23 @@
     "Username": "admin",
     "Password": "adminAjah123",
     "Role": "admin"
+  },
+  {
+    "Id": 15,
+    "Username": "userilham",
+    "Password": "123",
+    "Role": "User"
+  },
+  {
+    "Id": 16,
+    "Username": "agus",
+    "Password": "gaming",
+    "Role": "User"
+  },
+  {
+    "Id": 17,
+    "Username": "ihsangacor",
+    "Password": "123",
+    "Role": "User"
   }
 ]

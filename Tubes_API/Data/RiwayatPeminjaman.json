@@ -286,8 +286,8 @@
     "Type": "Mobil",
     "Peminjam": "tina",
     "TanggalPinjam": "2025-06-10T17:38:42.0459848+07:00",
-    "TanggalKembali": null,
-    "Status": "Dipinjam"
+    "TanggalKembali": "2025-06-12T10:31:49.7974834+07:00",
+    "Status": "Dikembalikan"
   },
   {
     "Id": 27,
@@ -296,6 +296,26 @@
     "Type": "Motor",
     "Peminjam": "nana",
     "TanggalPinjam": "2025-06-10T17:39:00.2858265+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 28,
+    "VehicleId": 3,
+    "Brand": "honda",
+    "Type": "motor",
+    "Peminjam": "syahdan",
+    "TanggalPinjam": "2025-06-12T10:19:43.2547774+07:00",
+    "TanggalKembali": null,
+    "Status": "Dipinjam"
+  },
+  {
+    "Id": 29,
+    "VehicleId": 4,
+    "Brand": "Kawasaki",
+    "Type": "Motor",
+    "Peminjam": "handi",
+    "TanggalPinjam": "2025-06-12T10:26:34.5458707+07:00",
     "TanggalKembali": null,
     "Status": "Dipinjam"
   }

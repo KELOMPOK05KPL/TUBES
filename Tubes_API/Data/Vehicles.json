@@ -4,7 +4,7 @@
     "Type": "Mobil",
     "Brand": "Toyota",
     "Model": "Avanza",
-    "State": 1
+    "State": 0
   },
   {
     "Id": 2,
@@ -18,14 +18,14 @@
     "Type": "motor",
     "Brand": "honda",
     "Model": "beat",
-    "State": 0
+    "State": 1
   },
   {
     "Id": 4,
     "Type": "Motor",
     "Brand": "Kawasaki",
     "Model": "Ninja 1000RR",
-    "State": 0
+    "State": 1
   },
   {
     "Id": 5,
@@ -53,6 +53,20 @@
     "Type": "Mobil",
     "Brand": "Mitsubishi",
     "Model": "E78",
+    "State": 0
+  },
+  {
+    "Id": 9,
+    "Type": "Bus",
+    "Brand": "Budiman",
+    "Model": "gacor",
+    "State": 0
+  },
+  {
+    "Id": 10,
+    "Type": "Motor",
+    "Brand": "Honda",
+    "Model": "250",
     "State": 0
   }
 ]

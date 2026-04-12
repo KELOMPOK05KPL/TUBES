@@ -21,7 +21,75 @@ namespace Tubes_KPL.LihatKendaraan
             _baseUrl = baseUrl;
         }
 
-        public async Task TampilkanSemuaKendaraan()
+        //public async Task TampilkanSemuaKendaraan()
+        //{
+        //    try
+        //    {
+        //        Console.WriteLine("\nMengambil data kendaraan...");
+        //        var response = await _httpClient.GetAsync($"{_baseUrl}/api/vehicles");
+
+        //        if (!response.IsSuccessStatusCode)
+        //        {
+        //            Console.WriteLine($"Gagal mengambil data. Status: {response.StatusCode}");
+        //            return;
+        //        }
+
+        //        var vehicles = await response.Content.ReadFromJsonAsync<List<Vehicle>>();
+
+        //        if (vehicles == null || vehicles.Count == 0)
+        //        {
+        //            Console.WriteLine("Tidak ada kendaraan tersedia.");
+        //            return;
+        //        }
+
+        //        Console.WriteLine("\nDaftar Kendaraan Tersedia:");
+        //        Console.WriteLine("-----------------------------------------------------------------");
+        //        Console.WriteLine("| ID  | Tipe\t| Brand\t\t| Model\t\t| Status\t|");
+        //        Console.WriteLine("-----------------------------------------------------------------");
+
+        //        foreach (var vehicle in vehicles)
+        //        {
+        //            Console.WriteLine($"| {vehicle.Id,-3} | {vehicle.Type,-7} | {vehicle.Brand,-13} | {vehicle.Model,-13} | {vehicle.State,-14}|");
+        //        }
+
+        //        Console.WriteLine("-----------------------------------------------------------------");
+        //        Console.WriteLine($"Total: {vehicles.Count} kendaraan");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Terjadi kesalahan: {ex.Message}");
+        //    }
+        //}
+
+        //public async Task TampilkanDetailKendaraan(int id)
+        //{
+        //    try
+        //    {
+        //        var response = await _httpClient.GetAsync($"{_baseUrl}/api/vehicles/{id}");
+
+        //        if (!response.IsSuccessStatusCode)
+        //        {
+        //            Console.WriteLine($"Kendaraan dengan ID {id} tidak ditemukan.");
+        //            return;
+        //        }
+
+        //        var vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
+
+        //        Console.WriteLine("\nDetail Kendaraan:");
+        //        Console.WriteLine("-------------------------------");
+        //        Console.WriteLine($"ID: {vehicle.Id}");
+        //        Console.WriteLine($"Merek: {vehicle.Brand}");
+        //        Console.WriteLine($"Tipe: {vehicle.Type}");
+        //        Console.WriteLine($"Status: {vehicle.State}");
+        //        Console.WriteLine("-------------------------------");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Terjadi kesalahan: {ex.Message}");
+        //    }
+        //}
+
+        public async Task<List<Vehicle>?> GetKendaraanDariApi()
         {
             try
             {
@@ -31,61 +99,47 @@ namespace Tubes_KPL.LihatKendaraan
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine($"Gagal mengambil data. Status: {response.StatusCode}");
-                    return;
+                    return null;
                 }
 
-                var vehicles = await response.Content.ReadFromJsonAsync<List<Vehicle>>();
-
-                if (vehicles == null || vehicles.Count == 0)
-                {
-                    Console.WriteLine("Tidak ada kendaraan tersedia.");
-                    return;
-                }
-
-                Console.WriteLine("\nDaftar Kendaraan Tersedia:");
-                Console.WriteLine("-----------------------------------------------------------------");
-                Console.WriteLine("| ID  | Tipe\t| Brand\t\t| Model\t\t| Status\t|");
-                Console.WriteLine("-----------------------------------------------------------------");
-
-                foreach (var vehicle in vehicles)
-                {
-                    Console.WriteLine($"| {vehicle.Id,-3} | {vehicle.Type,-7} | {vehicle.Brand,-13} | {vehicle.Model,-13} | {vehicle.State,-14}|");
-                }
-
-                Console.WriteLine("-----------------------------------------------------------------");
-                Console.WriteLine($"Total: {vehicles.Count} kendaraan");
+                return await response.Content.ReadFromJsonAsync<List<Vehicle>>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Terjadi kesalahan: {ex.Message}");
+                Console.WriteLine($"Terjadi kesalahan saat mengambil data: {ex.Message}");
+                return null;
             }
         }
 
-        public async Task TampilkanDetailKendaraan(int id)
+        public void TampilkanDaftarKendaraan(List<Vehicle> vehicles)
         {
-            try
+            if (vehicles == null || vehicles.Count == 0)
             {
-                var response = await _httpClient.GetAsync($"{_baseUrl}/api/vehicles/{id}");
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine($"Kendaraan dengan ID {id} tidak ditemukan.");
-                    return;
-                }
-
-                var vehicle = await response.Content.ReadFromJsonAsync<Vehicle>();
-
-                Console.WriteLine("\nDetail Kendaraan:");
-                Console.WriteLine("-------------------------------");
-                Console.WriteLine($"ID: {vehicle.Id}");
-                Console.WriteLine($"Merek: {vehicle.Brand}");
-                Console.WriteLine($"Tipe: {vehicle.Type}");
-                Console.WriteLine($"Status: {vehicle.State}");
-                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Tidak ada kendaraan tersedia.");
+                return;
             }
-            catch (Exception ex)
+
+            Console.WriteLine("\nDaftar Kendaraan Tersedia:");
+            Console.WriteLine("-----------------------------------------------------------------");
+            Console.WriteLine("| ID  | Tipe\t| Brand\t\t| Model\t\t| Status\t|");
+            Console.WriteLine("-----------------------------------------------------------------");
+
+            foreach (var vehicle in vehicles)
             {
-                Console.WriteLine($"Terjadi kesalahan: {ex.Message}");
+                Console.WriteLine($"| {vehicle.Id,-3} | {vehicle.Type,-7} | {vehicle.Brand,-13} | {vehicle.Model,-13} | {vehicle.State,-14}|");
+            }
+
+            Console.WriteLine("-----------------------------------------------------------------");
+            Console.WriteLine($"Total: {vehicles.Count} kendaraan");
+        }
+
+        // Method gabungan yang menggunakan kedua method di atas
+        public async Task TampilkanSemuaKendaraan()
+        {
+            var vehicles = await GetKendaraanDariApi();
+            if (vehicles != null)
+            {
+                TampilkanDaftarKendaraan(vehicles);
             }
         }
     }
